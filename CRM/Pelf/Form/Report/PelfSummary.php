@@ -257,13 +257,11 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
     $contract_worth = civicrm_api3('CustomField', 'getvalue', ['return' => "column_name", 'name' => "pelf_total_worth"]);
 
     // get activity type ids...
-    $activity_proposal = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "pelf_prospect_activity_type", 'option_group_id' => 'activity_type']);
-    $activity_contract = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "pelf_contract_activity_type", 'option_group_id' => 'activity_type']);
+    $activity_proposal = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "pelf_prospect_activity_type", 'option_group_id' => 'activity_type']);
+    $activity_contract = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "pelf_contract_activity_type", 'option_group_id' => 'activity_type']);
     // $activity_git      = ARLCRM\OptionGroup::getValueValue('activity_type','Get in touch');
 
-    $status_scheduled  = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "Scheduled", 'option_group_id' => "activity_status"]);
-    // xxx
-    $status_live       = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "Live", 'option_group_id' => "activity_status"]);
+    $status_scheduled  = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "Scheduled", 'option_group_id' => "activity_status"]);
 
     $sql = 
         "SELECT 
@@ -278,8 +276,8 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
         CONCAT_WS('~',assignee.id,assignee.display_name) assigned,
         ( SELECT git.id 
           FROM civicrm_activity git
-          WHERE /*git.activity_type_id = activity_git */
-          AND git.status_id = $status_scheduled
+          WHERE /*git.activity_type_id = activity_git AND */
+          git.status_id = $status_scheduled
           AND git.parent_id = a.id
           ORDER BY git.activity_date_time
           LIMIT 1 ) `next`
@@ -298,9 +296,11 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
                 AND prop_deets.$prop_stage IN ('speculative','writing','waiting','negotiating') )
              OR
              (  a.activity_type_id = $activity_contract
-                AND a.status_id IN($status_scheduled, $status_live) ) 
+                AND a.status_id = $status_scheduled 
+              )
             )
             ORDER BY funder.display_name";
+            error_log(str_replace("\n",  " ", $sql));
 
     /*
        Add in assigned to (Staff)
