@@ -52,7 +52,7 @@ function pelf_civicrm_install() {
   // Ensure we have the activity type set up for Prospects.
   $prospect = pelf_get_or_create('OptionValue', [
     'option_group_id' => "activity_type",
-    'name' => "pelf_prospect",
+    'name' => "pelf_prospect_activity_type",
   ],
   [ 'label' => 'Prospect']);
 
@@ -69,7 +69,7 @@ function pelf_civicrm_install() {
   //    group exists, and its values.
   $stage_opts_group = pelf_get_or_create('OptionGroup',
     ['name' => 'pelf_stage_opts'],
-    ['title' => 'Stage']);
+    ['title' => 'Stage', 'is_active' => 1]);
   $weight = 0;
   foreach ([
     "speculative" => "Speculative; Seeking Invitation",
@@ -82,7 +82,7 @@ function pelf_civicrm_install() {
   ] as $name => $label) {
     pelf_get_or_create('OptionValue',
       [ 'option_group_id' => "pelf_stage_opts", 'name' => $name, ],
-      [ 'label' => $label, 'weight' => $weight++, ]);
+      [ 'label' => $label, 'value' => $name, 'weight' => $weight++, ]);
   }
   // ... Now we can check the Stage Select field.
   $prospect_field_stage = pelf_get_or_create('CustomField', [
@@ -112,11 +112,11 @@ function pelf_civicrm_install() {
 
   // Check the Contract Activity
   $contract = pelf_get_or_create('OptionValue',
-    ['option_group_id' => "activity_type", 'name' => "pelf_contract"],
+    ['option_group_id' => "activity_type", 'name' => "pelf_contract_activity_type"],
     ['label' => "Contract"]);
 
   // Ensure we have the custom field group we need for contracts.
-  $prospect_customgroup = pelf_get_or_create('CustomGroup', [
+  $contract_customgroup = pelf_get_or_create('CustomGroup', [
     'name' => "pelf_contract",
     'extends' => "Activity",
     'extends_entity_column_value' => $contract['value'],
@@ -133,80 +133,6 @@ function pelf_civicrm_install() {
       'default_value' => "0",
     ],
     ['label' => 'Total Worth', 'help_pre' => "Enter the amount in your currency."]);
-}
-
-/**
- * Function to create activity type
- *
- * @author http://civicrm.stackexchange.com/a/3106/35
- *
- * @param array $params
- * @return array
- * @throws Exception when params invalid
- * @throws Exception when error from API create
- * @access public
- * @static
- */
-function createActivityType($params) {
-  $activityTypeData = array();
-  $params['option_group_id'] = self::getOptionGroupIdWithName('activity_type');
-  if (!isset($params['name']) || empty($params['name'])) {
-    throw new Exception('When trying to create an Activity Type name is a mandatory parameter and can not be empty');
-  }
-  if (empty($params['label']) || !isset($params['label'])) {
-    $params['label'] = self::buildLabelFromName($params['name']);
-  }
-  if (!isset($params['is_active'])) {
-    $params['is_active'] = 1;
-  }
-  if (self::getActivityTypeWithName($params['name']) == FALSE) {
-    try {
-      $activityType = civicrm_api3('OptionValue', 'Create', $params);
-      $activityTypeData = $activityType['values'][$activityType['id']];
-    } catch (CiviCRM_API3_Exception $ex) {
-      throw new Exception('Could not create activity type with name ' . $params['name']
-        . ', error from API OptionValue Create: ' . $ex->getMessage());
-    }
-  }
-  return $activityTypeData;
-}
-
-
-}
-/**
- * Function to create activity type
- *
- * @author http://civicrm.stackexchange.com/a/3106/35
- *
- * @param array $params
- * @return array
- * @throws Exception when params invalid
- * @throws Exception when error from API create
- * @access public
- * @static
- */
-function createActivityType($params) {
-  $activityTypeData = array();
-  $params['option_group_id'] = self::getOptionGroupIdWithName('activity_type');
-  if (!isset($params['name']) || empty($params['name'])) {
-    throw new Exception('When trying to create an Activity Type name is a mandatory parameter and can not be empty');
-  }
-  if (empty($params['label']) || !isset($params['label'])) {
-    $params['label'] = self::buildLabelFromName($params['name']);
-  }
-  if (!isset($params['is_active'])) {
-    $params['is_active'] = 1;
-  }
-  if (self::getActivityTypeWithName($params['name']) == FALSE) {
-    try {
-      $activityType = civicrm_api3('OptionValue', 'Create', $params);
-      $activityTypeData = $activityType['values'][$activityType['id']];
-    } catch (CiviCRM_API3_Exception $ex) {
-      throw new Exception('Could not create activity type with name ' . $params['name']
-        . ', error from API OptionValue Create: ' . $ex->getMessage());
-    }
-  }
-  return $activityTypeData;
 }
 
 /**

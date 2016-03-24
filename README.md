@@ -65,3 +65,22 @@ Then schedule as many Get In Touch follow up activities as are needed to record 
 *   You can assign each of these to the appropriate member(s) of staff.
 *   Update them to status **Completed** when done.
 *   Use the Details field to record anything specific, but it might be helpful to keep most of the key information on either the prospect or the contract activity.
+
+# Technical Notes
+
+This creates a couple of activity types on installation, which are referred to
+in the code by their unique names.
+
+- `pelf_prospect_activity_type` Activity type.
+
+  This activity has a custom field group named `pelf_prospect` which contains:
+
+  - `pelf_stage` Select field. Uses an option group named `pelf_stage_opts`.
+  - `pelf_est_worth` Text float field.
+
+- `pelf_contract_activity_type` Activity type.
+
+  This activity type has a customfield group named `pelf_contract` which contains:
+
+  - `pelf_total_worth` Text float field.
+

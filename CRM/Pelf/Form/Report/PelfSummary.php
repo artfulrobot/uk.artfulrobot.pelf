@@ -249,23 +249,22 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
 
     $this->beginPostProcess();
 
-    $proposal_deets = ARLCRM\CustomGroup::getDetails( 'Proposal_Details');
-    $prop_deets_table = $proposal_deets['table_name'];
-    $prop_stage = $proposal_deets['fields']['Stage']['column_name'];
-    $prop_worth = $proposal_deets['fields']['Estimated Worth (£)']['column_name'];
+    $prop_deets_table = civicrm_api3('CustomGroup', 'getvalue', ['return' => "table_name", 'name' => "pelf_prospect"]);
+    $prop_stage = civicrm_api3('CustomField', 'getvalue', ['return' => "column_name", 'name' => "pelf_stage"]);
+    $prop_worth  = civicrm_api3('CustomField', 'getvalue', ['return' => "column_name", 'name' => "pelf_est_worth"]);
 
-    $contract_deets = ARLCRM\CustomGroup::getDetails( 'Contract_Details');
-    $contract_deets_table = $contract_deets['table_name'];
-    $contract_worth = $contract_deets['fields']['Total Worth (£)']['column_name'];
+    $contract_deets_table = civicrm_api3('CustomGroup', 'getvalue', ['return' => "table_name", 'name' => "pelf_contract"]);
+    $contract_worth = civicrm_api3('CustomField', 'getvalue', ['return' => "column_name", 'name' => "pelf_total_worth"]);
 
     // get activity type ids...
-    $activity_proposal = ARLCRM\OptionGroup::getValueValue('activity_type','Grant Funding Proposal');
-    $activity_contract = ARLCRM\OptionGroup::getValueValue('activity_type','Grant Funding Contract');
-    $activity_git      = ARLCRM\OptionGroup::getValueValue('activity_type','Get in touch');
-    $status_scheduled  = ARLCRM\OptionGroup::getValueValue('activity_status','Scheduled');
-    $status_live       = ARLCRM\OptionGroup::getValueValue('activity_status','Live');
+    $activity_proposal = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "pelf_prospect_activity_type", 'option_group_id' => 'activity_type']);
+    $activity_contract = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "pelf_contract_activity_type", 'option_group_id' => 'activity_type']);
+    // $activity_git      = ARLCRM\OptionGroup::getValueValue('activity_type','Get in touch');
 
-    // note1: your query
+    $status_scheduled  = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "Scheduled", 'option_group_id' => "activity_status"]);
+    // xxx
+    $status_live       = civicrm_api3('OptionValue', 'getvalue', ['return' => "id", 'name' => "Live", 'option_group_id' => "activity_status"]);
+
     $sql = 
         "SELECT 
         IF(funder.id, CONCAT_WS('~',funder.id,funder.display_name), 'Missing Funder!') funder, 
@@ -279,7 +278,7 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
         CONCAT_WS('~',assignee.id,assignee.display_name) assigned,
         ( SELECT git.id 
           FROM civicrm_activity git
-          WHERE git.activity_type_id = $activity_git
+          WHERE /*git.activity_type_id = activity_git */
           AND git.status_id = $status_scheduled
           AND git.parent_id = a.id
           ORDER BY git.activity_date_time
