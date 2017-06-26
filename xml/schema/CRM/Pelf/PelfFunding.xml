@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Pelf</base>
+  <class>PelfFunding</class>
+  <name>civicrm_pelffunding</name>
+  <comment>Holds details of how funding is split between financial years, and possibly projects.</comment>
+  <add>4.6</add>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique PelfFunding ID</comment>
+    <add>4.6</add>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>activity_id</name>
+    <type>int unsigned</type>
+    <comment>FK to Activity</comment>
+    <add>4.6</add>
+  </field>
+  <foreignKey>
+    <name>activity_id</name>
+    <table>civicrm_activity</table>
+    <required>true</required>
+    <key>id</key>
+    <add>4.6</add>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>amount</name>
+    <type>decimal</type>
+    <required>true</required>
+    <dataPattern>/^\d+(\.\d{2})?$/</dataPattern>
+    <comment>Amount</comment>
+    <add>4.6</add>
+  </field>
+
+  <field>
+    <name>financial_year</name>
+    <type>text</type>
+    <required>true</required>
+    <dataPattern>/^\d{4}-\d{4}$/</dataPattern>
+    <comment>Financial year, like 2017-2018</comment>
+    <add>4.6</add>
+  </field>
+
+  <field>
+    <name>project_contact_id</name>
+    <title>Contact ID of Project</title>
+    <type>int unsigned</type>
+    <dataPattern>/^\d+$/</dataPattern>
+    <comment>Optional FK to Contact ID - requires Project extension</comment>
+    <html>
+       <type>EntityRef</type>
+     </html>
+     <add>4.6</add>
+  </field>
+  <foreignKey>
+    <name>project_contact_id</name>
+    <table>civicrm_contact</table>
+    <key>id</key>
+    <add>4.6</add>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>note</name>
+    <type>text</type>
+    <comment>Note and/or Comment.</comment>
+    <import>true</import>
+    <add>4.6</add>
+  </field>
+
+</table>

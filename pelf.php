@@ -229,6 +229,19 @@ function pelf_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 }
 
 /**
+ * Define our entities.
+ *
+ * This seems required despite the file at
+ * xml/schema/CRM/Pelf/PelfFunding.entityType.php
+ */
+function pelf_civicrm_entityTypes(&$entityTypes) {
+  $entityTypes[] = [
+    'name' => 'PelfFunding',
+    'class' => 'CRM_Pelf_DAO_PelfFunding',
+    'table' => 'civicrm_pelffunding',
+  ];
+}
+/**
  * Functions below this ship commented out. Uncomment as required.
  *
 

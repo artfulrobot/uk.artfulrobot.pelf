@@ -1,6 +1,5 @@
 <?php
 use \ArtfulRobot as ARL;
-use \ArtfulRobot\CiviCRM as ARLCRM;
 
 class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
 
@@ -14,115 +13,12 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
   protected $_customGroupGroupBy = FALSE;
   function __construct() {
     // This is not needed; there are no options.
-    if (FALSE) {
+    if (TRUE) {
       $this->_columns = array(
       'civicrm_contact' => array(
         'dao' => 'CRM_Contact_DAO_Contact',
-        'fields' => array(
-          'sort_name' => array(
-            'title' => ts('Contact Name'),
-            'required' => TRUE,
-            'default' => TRUE,
-            'no_repeat' => TRUE,
-          ),
-          'id' => array(
-            'no_display' => TRUE,
-            'required' => TRUE,
-          ),
-          'first_name' => array(
-            'title' => ts('First Name'),
-            'no_repeat' => TRUE,
-          ),
-          'id' => array(
-            'no_display' => TRUE,
-            'required' => TRUE,
-          ),
-          'last_name' => array(
-            'title' => ts('Last Name'),
-            'no_repeat' => TRUE,
-          ),
-          'id' => array(
-            'no_display' => TRUE,
-            'required' => TRUE,
-          ),
-        ),
-        'filters' => array(
-          'sort_name' => array(
-            'title' => ts('Contact Name'),
-            'operator' => 'like',
-          ),
-          'id' => array(
-            'no_display' => TRUE,
-          ),
-        ),
-        'grouping' => 'contact-fields',
-      ),
-      'civicrm_membership' => array(
-        'dao' => 'CRM_Member_DAO_Membership',
-        'fields' => array(
-          'membership_type_id' => array(
-            'title' => 'Membership Type',
-            'required' => TRUE,
-            'no_repeat' => TRUE,
-          ),
-          'join_date' => array('title' => ts('Join Date'),
-            'default' => TRUE,
-          ),
-          'source' => array('title' => 'Source'),
-        ),
-        'filters' => array(
-          'join_date' => array(
-            'operatorType' => CRM_Report_Form::OP_DATE,
-          ),
-          'owner_membership_id' => array(
-            'title' => ts('Membership Owner ID'),
-            'operatorType' => CRM_Report_Form::OP_INT,
-          ),
-          'tid' => array(
-            'name' => 'membership_type_id',
-            'title' => ts('Membership Types'),
-            'type' => CRM_Utils_Type::T_INT,
-            'operatorType' => CRM_Report_Form::OP_MULTISELECT,
-            'options' => CRM_Member_PseudoConstant::membershipType(),
-          ),
-        ),
-        'grouping' => 'member-fields',
-      ),
-      'civicrm_membership_status' => array(
-        'dao' => 'CRM_Member_DAO_MembershipStatus',
-        'alias' => 'mem_status',
-        'fields' => array(
-          'name' => array(
-            'title' => ts('Status'),
-            'default' => TRUE,
-          ),
-        ),
-        'filters' => array(
-          'sid' => array(
-            'name' => 'id',
-            'title' => ts('Status'),
-            'type' => CRM_Utils_Type::T_INT,
-            'operatorType' => CRM_Report_Form::OP_MULTISELECT,
-            'options' => CRM_Member_PseudoConstant::membershipStatus(NULL, NULL, 'label'),
-          ),
-        ),
-        'grouping' => 'member-fields',
-      ),
-      'civicrm_address' => array(
-        'dao' => 'CRM_Core_DAO_Address',
-        'fields' => array(
-          'street_address' => NULL,
-          'city' => NULL,
-          'postal_code' => NULL,
-          'state_province_id' => array('title' => ts('State/Province')),
-          'country_id' => array('title' => ts('Country')),
-        ),
-        'grouping' => 'contact-fields',
-      ),
-      'civicrm_email' => array(
-        'dao' => 'CRM_Core_DAO_Email',
-        'fields' => array('email' => NULL),
-        'grouping' => 'contact-fields',
+        'fields' => [],
+        'filters' => [],
       ),
     );
     }
@@ -259,7 +155,6 @@ class CRM_Pelf_Form_Report_PelfSummary extends CRM_Report_Form {
     // get activity type ids...
     $activity_proposal = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "pelf_prospect_activity_type", 'option_group_id' => 'activity_type']);
     $activity_contract = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "pelf_contract_activity_type", 'option_group_id' => 'activity_type']);
-    // $activity_git      = ARLCRM\OptionGroup::getValueValue('activity_type','Get in touch');
 
     $status_scheduled  = (int) civicrm_api3('OptionValue', 'getvalue', ['return' => "value", 'name' => "Scheduled", 'option_group_id' => "activity_status"]);
 
