@@ -1,1 +1,21 @@
 /* Add any CSS rules for Angular module "pelf" */
+.pelf-prospect {
+
+}
+.pelf-row {
+  display:flex;
+  flex-wrap:wrap;
+}
+.pelf-label {
+  flex: 0 1 12rem;
+}
+.pelf-values {
+  flex: 1 0 12rem;
+}
+.pelf-values ul,
+.region-content .pelf-values ul {
+  margin:0;
+  list-style:none;
+}
+.pelf-values>ul>li {
+}

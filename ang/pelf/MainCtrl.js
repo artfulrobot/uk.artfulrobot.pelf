@@ -20,13 +20,15 @@
 
       $routeProvider.when('/pelf/prospect/:id', {
         controller: 'PelfProspectCtrl',
-        template: '<p>hello</p><pelf-prospect prospect-id="prospectId" /><p>Bye</p>',
+        templateUrl: '~/pelf/PelfProspectCtrl.html',
 
         resolve: {
           prospect: function($route, crmApi) {
             // Look up the Prospect.
-            console.log($route.current.params.id);
-            return $route.current.params.id;
+            return crmApi('Activity', 'GetPelfProspect', {
+              id: $route.current.params.id
+              //return: ['first_name', 'last_name']
+            });
           }
         }
       });
