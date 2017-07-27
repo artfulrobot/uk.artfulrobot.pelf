@@ -1,0 +1,122 @@
+<div class="pelf-prospect" pelf-greedy ng-if="prospect">
+  <h1 crm-page-title >{{ prospect.subject ? 'Prospect: ' + prospect.subject : 'New prospect' }}</h1>
+
+  <div class="pelf-page-actions">
+    <a href class="pelf-edit" ng-show="editData === false" ng-click="editStart()" >Edit</a>
+    <div ng-show="editData" >
+      <a href class="pelf-edit" ng-click="editCancel()" >Cancel Edits</a> |
+      <a href class="pelf-edit" ng-click="editSave()" >Save Edits</a>
+    </div>
+  </div>
+
+  <!-- Name Edit form -->
+  <form class="pelf-name" crm-ui-id-scope ng-show="editData"  >
+    <div>
+      <label crm-ui-for="name">Prospect Name</label>
+      <input crm-ui-id="name" ng-model="editData.name" name="prospect_name"/>
+    </div>
+  </form>
+
+  <div class="pelf-row">
+    <div class="pelf-column-1" >
+      <div class="pelf-stage-wrapper">
+        <div ng-show="!editData" class="pelf-stage pelf-stage--{{prospect.stage}}" >{{ getStage() }}</div>
+        <form crm-ui-id-scope ng-show="editData"  >
+          <div>
+            <label crm-ui-for="stage">Stage</label>
+            <select crm-ui-id="stage" ng-model="editData.stage" ng-if="editData"
+               ng-options='item.value as item.label for item in prospect.stages' >
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="pelf-column-2" >
+      <pre>{{ orgsListEditStart |json }}</pre>
+      <pelf-orgs-list activity="prospect"
+        edit-start="orgsListEditStart"
+        edit-save="orgsListEditSave"
+        edit-cancel="orgsListEditCancel"
+        ></pelf-orgs-list>
+      <div class="pelf-date">
+        <span ng-if="!editData" >Since {{ formatDate(prospect.date) }}</span>
+        <!-- Date Edit form -->
+        <form crm-ui-id-scope ng-if="editData"  >
+          <div >
+            <label crm-ui-for='date' >Date</label>
+            <input crm-ui-datepicker="{time:false}" crm-ui-id="date" ng-model="editData.when"/>
+          </div>
+          <div>Note this should be the date you started work on this prospect.</div>
+        </form>
+      </div>
+
+      <div ng-if="!editData" ng-bind-html="prospect.details" pelf-expander="5rem" ></div>
+
+      <form crm-ui-id-scope ng-show="editData"  >
+        <div>
+          <label crm-ui-for="details">Details, notes</label>
+          <textarea crm-ui-id="details" crm-ui-richtext name="body_html" ng-model="editData.details"></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- amounts -->
+  <div class="pelf-row">
+    <div class="pelf-column-1" >
+      <div class="pelf-amount-wrapper" >
+        <h2>&pound;{{ prospect.est_amount | localeNumber }}</h2>
+        <div ng-show="!editData" >
+          @ {{ prospect.scale }}%, est worth: &pound;{{ estWorth() | localeNumber }}
+        </div>
+        <!-- Amount Edit form -->
+        <form crm-ui-id-scope ng-show="editData"  >
+          <div>
+            <label crm-ui-for="est_amount">Est. Amount</label>
+            <input crm-ui-id="est_amount" type="number" ng-model="editData.est_amount"/>
+          </div>
+          <div>
+            <label crm-ui-for="est_amount">Liklihood %</label>
+            <input crm-ui-id="scale" type="number" max="100" min="1" ng-model="editData.scale"/>
+          </div>
+        </form>
+        <div class="crm-error" ng-show="sumFunding() < prospect.est_amount">&pound;{{ prospect.est_amount - sumFunding() }} is not allocated.</div>
+        <div class="crm-error" ng-show="sumFunding() > prospect.est_amount">&pound;{{ sumFunding() - prospect.est_amount }} less than allocated.</div>
+      </div>
+    </div>
+    <div class="pelf-column-2" >
+      <pelf-funding activity-id="prospect.id" funding="prospect.funding" ng-show="prospect.id" />
+    </div>
+  </div>
+
+
+  <div class="pelf-row">
+    <div class="pelf-column-1">
+      <h2>Coming up</h2>
+    </div>
+    <div class="pelf-column-2">
+      <table>
+        <thead><tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Subject</th>
+            <th>With</th>
+        </tr></thead>
+        <tbody>
+          <tr ng-repeat="activity in prospect.related_activities" >
+            <td>{{formatDate(activity.activity_date_time)}}</td>
+            <td>{{activity.activity_type}}</td>
+            <td>{{activity.subject}}</td>
+            <td>
+              <div ng-repeat="(contact_id, name) in activity.targets">
+                <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact_id}) }}" >{{name}}</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

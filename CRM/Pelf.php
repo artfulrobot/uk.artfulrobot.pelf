@@ -16,7 +16,8 @@ class CRM_Pelf
    *
    * Custom fields we use:
    * - pelf_stage
-   * - pelf_est_worth
+   * - pelf_est_amount
+   * - pelf_prospect_scale
    * - pelf_total_worth
    *
    */

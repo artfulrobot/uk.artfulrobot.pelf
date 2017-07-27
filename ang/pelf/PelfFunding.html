@@ -1,0 +1,38 @@
+<table class="pelf-funding" >
+  <colgroup>
+    <col></col>
+    <col></col>
+    <col width="50%"></col>
+    <col></col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="pelf-amount">Amount</th>
+      <th>Financial Year</th>
+      <th>Note</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody ng-repeat="grp in groupedFunding">
+    <tr ng-repeat-start="part in grp.rows" ng-show="part.id != selected.id">
+      <td class="pelf-amount">&pound;{{ part.amount | localeNumber }}</td>
+      <td>{{ part.financial_year }}</td>
+      <td>{{ part.note }}</td>
+      <td ><div ng-show="!selected">
+          <a href ng-click="editRow(part)" >Edit</a> |
+          <a href crm-confirm="{type: 'delete', obj:part}" on-yes="deleteRow(part)" >Delete</a>
+      </div></td>
+    </tr>
+    <tr ng-repeat-end pelf-funding-edit edit-row="selected" ng-if="part.id == selected.id" />
+    <tr ng-if="grp.rows.length>1" class="pelf-subtotal">
+      <td class="pelf-amount" >&pound;{{grp.sum|localeNumber}}</td>
+      <td>Total {{grp.year}}</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+  <tbody ng-if="selected && !selected.id" >
+    <tr pelf-funding-edit edit-row="selected" />
+  </tbody>
+</table>
+<a href ng-click="editRow()" ng-show="!selected" >Add Row</a>

@@ -31,7 +31,7 @@ function pelf_civicrm_xmlMenu(&$files) {
  * @param Array $params_extra these plus $params_min are used if a create call
  *              is needed.
  */
-function pelf_get_or_create($entity, $params_min, $params_extra) {
+function pelf_get_or_create($entity, $params_min, $params_extra=[]) {
   $params_min += ['sequential' => 1];
   $result = civicrm_api3($entity, 'get', $params_min);
   if (!$result['count']) {
@@ -58,8 +58,8 @@ function pelf_civicrm_install() {
 
   // Ensure we have the custom field group we need for prospects.
   $prospect_customgroup = pelf_get_or_create('CustomGroup', [
-    'name' => "pelf_prospect",
-    'extends' => "Activity",
+    'name'                        => "pelf_prospect",
+    'extends'                     => "Activity",
     'extends_entity_column_value' => $prospect['value'],
   ],
   ['title' => 'Prospect Details']);
@@ -72,13 +72,13 @@ function pelf_civicrm_install() {
     ['title' => 'Stage', 'is_active' => 1]);
   $weight = 0;
   foreach ([
-    "speculative" => "Speculative; Seeking Invitation",
-    "writing" => "Writing proposal/tender",
-    "waiting" => "Awaiting result",
-    "successful" => "Successful",
+    "speculative"  => "Speculative; Seeking Invitation",
+    "writing"      => "Writing proposal/tender",
+    "waiting"      => "Awaiting result",
+    "successful"   => "Successful",
     "unsuccessful" => "Unsuccessful",
-    "dropped" => "Dropped by us",
-    "negotiating" => "Negotiating",
+    "dropped"      => "Dropped by us",
+    "negotiating"  => "Negotiating",
   ] as $name => $label) {
     pelf_get_or_create('OptionValue',
       [ 'option_group_id' => "pelf_stage_opts", 'name' => $name, ],
@@ -86,29 +86,45 @@ function pelf_civicrm_install() {
   }
   // ... Now we can check the Stage Select field.
   $prospect_field_stage = pelf_get_or_create('CustomField', [
-    'name' => "pelf_stage",
+    'name'            => "pelf_stage",
     'custom_group_id' => $prospect_customgroup['id'],
-    'data_type' => "String",
-    'html_type' => "Select",
-    'is_required' => "1",
-    'is_searchable' => "1",
-    'default_value' => "speculative",
-    'text_length' => "30",
+    'data_type'       => "String",
+    'html_type'       => "Select",
+    'is_required'     => "1",
+    'is_searchable'   => "1",
+    'default_value'   => "speculative",
+    'text_length'     => "30",
     'option_group_id' => $stage_opts_group['id'],
   ],
   ['label' => 'Stage']);
 
   // Add the Est Worth field.
   $prospect_field_worth = pelf_get_or_create('CustomField', [
-      'name' => "pelf_est_worth",
+      'name'            => "pelf_est_amount",
       'custom_group_id' => $prospect_customgroup['id'],
-      'data_type' => "Float",
-      'html_type' => "Text",
-      'is_required' => "1",
-      'default_value' => "0",
+      'data_type'       => "Float",
+      'html_type'       => "Text",
+      'is_required'     => "1",
+      'default_value'   => "0",
     ],
-    ['label' => 'Estimated Worth', 'help_pre' => "Enter the amount in your currency."]);
+    ['label' => 'Estimated Amount', 'help_pre' => "Enter the amount you are applying/tendering for in your currency."]);
 
+  // Add the prospect_scale field.
+  $prospect_field_worth = pelf_get_or_create('CustomField', [
+      'name'            => "pelf_prospect_scale",
+      'custom_group_id' => $prospect_customgroup['id'],
+      'data_type'       => "Float",
+      'html_type'       => "Text",
+      'is_required'     => "1",
+      'default_value'   => "20",
+    ],
+    [
+      'label'    => 'Liklihood %',
+      'help_pre' => "If you know you're going to get "
+        . "this it's 100. If you know that you normally win about 15% of bids like "
+        . "this, it's 15. The Estimated Amount is multiplied by this percentage to "
+        . "give the Estimated Worth of the prospect."
+    ]);
 
   // Check the Contract Activity
   $contract = pelf_get_or_create('OptionValue',
@@ -117,20 +133,20 @@ function pelf_civicrm_install() {
 
   // Ensure we have the custom field group we need for contracts.
   $contract_customgroup = pelf_get_or_create('CustomGroup', [
-    'name' => "pelf_contract",
-    'extends' => "Activity",
+    'name'                        => "pelf_contract",
+    'extends'                     => "Activity",
     'extends_entity_column_value' => $contract['value'],
   ],
   ['title' => 'Contract Details']);
 
   // Add the Total Worth field.
   $contract_field_worth = pelf_get_or_create('CustomField', [
-      'name' => "pelf_total_worth",
+      'name'            => "pelf_total_worth",
       'custom_group_id' => $contract_customgroup['id'],
-      'data_type' => "Float",
-      'html_type' => "Text",
-      'is_required' => "1",
-      'default_value' => "0",
+      'data_type'       => "Float",
+      'html_type'       => "Text",
+      'is_required'     => "1",
+      'default_value'   => "0",
     ],
     ['label' => 'Total Worth', 'help_pre' => "Enter the amount in your currency."]);
 }

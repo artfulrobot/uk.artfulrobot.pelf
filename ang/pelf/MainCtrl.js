@@ -5,29 +5,29 @@
       $routeProvider.when('/pelf', {
         controller: 'PelfMainCtrl',
         templateUrl: '~/pelf/MainCtrl.html',
-
-        // If you need to look up data when opening the page, list it out
-        // under "resolve".
-        resolve: {
-          myContact: function(crmApi) {
-            return crmApi('Contact', 'getsingle', {
-              id: 'user_contact_id',
-              return: ['first_name', 'last_name']
-            });
-          }
-        }
       });
 
       $routeProvider.when('/pelf/prospect/:id', {
-        controller: 'PelfProspectCtrl',
-        templateUrl: '~/pelf/PelfProspectCtrl.html',
-
+        template: '<pelf-prospect prospect="prospect" ></pelf-prospect>',
+        controller: function($scope, $route, prospect) {
+          // Pass prospect looked up from id in route to template.
+          $scope.prospect = prospect;
+        },
         resolve: {
-          prospect: function($route, crmApi) {
-            // Look up the Prospect.
+          prospect: function(crmApi, $route, $location) {
+            // Look up the prospect.
             return crmApi('Activity', 'GetPelfProspect', {
-              id: $route.current.params.id
-              //return: ['first_name', 'last_name']
+              id: $route.current.params.id,
+              with_activities: 1
+            })
+            .then(function(r) {
+              console.log("prospect:" , r);
+              return r;
+            }, function(e) {
+              // @todo issue notice somehow.
+              console.warn("error", e);
+              $location.path("/pelf/");
+              $location.replace();
             });
           }
         }
@@ -39,26 +39,25 @@
   //   $scope -- This is the set of variables shared between JS and HTML.
   //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
   //   myContact -- The current contact, defined above in config().
-  angular.module('pelf').controller('PelfMainCtrl', function($scope, crmApi, crmStatus, crmUiHelp, prospect) {
+  angular.module('pelf').controller('PelfMainCtrl', function($scope, crmApi, crmStatus, crmUiHelp) {
+    console.log("PelfMainCtrl");
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('pelf');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/pelf/MainCtrl'}); // See: templates/CRM/pelf/MainCtrl.hlp
 
-    // We have myContact available in JS. We also want to reference it in HTML.
-    $scope.prospect = prospect;
-
-    $scope.save = function save() {
-      return crmStatus(
-        // Status messages. For defaults, just use "{}"
-        {start: ts('Saving...'), success: ts('Saved')},
-        // The save action. Note that crmApi() returns a promise.
-        crmApi('Contact', 'create', {
-          id: myContact.id,
-          first_name: myContact.first_name,
-          last_name: myContact.last_name
-        })
-      );
+    $scope.prospectAdd = function prospectAdd() {
+      $location.path("/pelf/prospect/add");
+      $location.replace();
     };
   });
 
+  // Kill off Drupal/Garland sidebars.
+  angular.module('pelf').directive('pelfGreedy', function() {
+    return {
+      link: function (scope, element, attrs) {
+        // These are specific to Garland theme (and probably should not be here!).
+        $('body').addClass('pelf').removeClass('one-sidebar sidebar-first');
+      }
+    };
+  });
 })(angular, CRM.$, CRM._);

@@ -5,17 +5,133 @@
 .pelf-row {
   display:flex;
   flex-wrap:wrap;
+  padding:1rem 0;
+  margin-bottom:2rem;
+  margin-left:-1rem;
+  margin-right:-1rem;
 }
-.pelf-label {
-  flex: 0 1 12rem;
+.pelf-row h2:first-child {
+  margin-top:0;
+}
+.pelf-column-1 {
+  flex:1 0 20%;
+  min-width: 12rem;
+  padding:0 1rem;
+}
+.pelf-column-2 {
+  flex:1 0 70%;
+  padding:0 1rem;
+}
+
+.pelf-actions {
+  flex: 0 1 8rem;
+  padding:0.5rem;
+  margin-bottom:4px;
+  text-align:right;
 }
 .pelf-values {
   flex: 1 0 12rem;
+  padding-right:0.5rem;
+}
+.pelf-amount,
+.crm-container th.pelf-amount
+{
+  white-space: nowrap;
 }
 .pelf-values ul,
 .region-content .pelf-values ul {
-  margin:0;
-  list-style:none;
 }
-.pelf-values>ul>li {
+.pelf-org-list ul.pelf-org-list,
+.region-content ul.pelf-org-list {
+  margin:0;
+  padding:0;
+}
+.pelf-org-list a.pelf-org {
+  font-size:1.4rem;
+  line-height:1.4;
+}
+ul.pelf-org-list li {
+  list-style:none;
+  padding:0;
+  margin-bottom:0.4em;
+}
+.pelf-org-deletable {
+  background-color: #e6e6e2;
+  padding: 0.25em 0.5em;
+  line-height:1;
+  cursor:pointer;
+  display:inline-block;
+  margin-bottom:4px;
+}
+.pelf-org-deletable:after {
+  color: #822;
+  content: '✕';
+  display:inline-block;
+  padding: 0.25em 0 0.25em 0.4em;
+  border-left:solid 1px #ddd;
+  margin: -0.25em 0 0 0.4em;
+  text-align:center;
+}
+.pelf-org-deletable:hover {
+  background-color: #e6aaaa;
+}
+
+table.pelf-funding {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border:none;
+}
+table.pelf-funding td {
+  border:none;
+}
+tr.pelf-subtotal {
+  border-top: solid 1px #ddd;
+  border-bottom: solid 1px #ddd;
+  font-weight:bold;
+  color:#444;
+}
+.pelf-stage {
+  font-size:1.4rem;
+  display:block;
+  text-align:center;
+  padding:0 0.5em;
+  background:#eee;
+  line-height:1.4;
+}
+
+div.crm-container .pelf-prospect label {
+  display: block;
+}
+
+form.pelf-name input {
+  width: 100%;
+}
+
+.pelf-page-actions {
+  background: rgba(255,255,255,0.95);
+  padding:0.5rem 0;
+  position: sticky;
+  top:4rem;
+}
+.pelf-page-actions a {
+  border:solid 1px #eee;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+.pelf-page-actions a:hover {
+  background: #eee;
+  botder-color: #ddd;
+}
+.pelf-date {
+  margin-bottom:1rem;
+}
+/* These are specific to Garland theme (and probably should not be here!) */
+body.pelf #sidebar-first {
+  display: none;
+}
+body.pelf #content {
+  display:block;
+  float: none;
 }
