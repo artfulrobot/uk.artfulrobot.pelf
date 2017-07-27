@@ -6,10 +6,10 @@
     return {
       // The prospect (Activity.getPelfProspect) is fed in via attribute.
       scope: {
-        prospect: '=prospect'
+        prospect: '='
       },
       // This directive has its own controller.
-      controller: ['$scope', function ($scope) {
+      controller: ['$scope', '$location', function ($scope, $location) {
         console.log("prospect controller running", $scope);
         $scope.crmUrl = CRM.url;
 
@@ -124,6 +124,7 @@
 
       }], // end of controller.
       link: function(scope, elem, attrs) {
+        if (true) return;
         if (scope.prospect && !scope.prospect.id) {
           $timeout(function() {
             elem.find('input[name="prospect_name"]').focus();

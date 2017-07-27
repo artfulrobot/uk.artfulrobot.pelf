@@ -147,53 +147,56 @@ function civicrm_api3_activity_Getpelfprospect($params) {
     unset($activities[$params['id']]);
 
     // Get the assignee and target contacts for these activities.
-    $results = civicrm_api3('ActivityContact', 'get', ['activity_id' => ['IN' => array_keys($activities)]]);
-    $unique_contact_ids = [];
-    foreach ($results['values'] as $ac) {
-      if ($ac['record_type_id'] == 1) {
-        $activities[$ac['activity_id']]['assignees'][$ac['contact_id']] = '';
-      }
-      elseif ($ac['record_type_id'] == 3) {
-        if (count($activities[$ac['activity_id']]['targets']) > 19) {
-          continue; // ignore more than 20 contcts!
+    if ($activities) {
+      $results = civicrm_api3('ActivityContact', 'get', ['activity_id' => ['IN' => array_keys($activities)]]);
+      $unique_contact_ids = [];
+      foreach ($results['values'] as $ac) {
+        if ($ac['record_type_id'] == 1) {
+          $activities[$ac['activity_id']]['assignees'][$ac['contact_id']] = '';
         }
-        $activities[$ac['activity_id']]['targets'][$ac['contact_id']] = '';
+        elseif ($ac['record_type_id'] == 3) {
+          if (count($activities[$ac['activity_id']]['targets']) > 19) {
+            continue; // ignore more than 20 contcts!
+          }
+          $activities[$ac['activity_id']]['targets'][$ac['contact_id']] = '';
+        }
+        $unique_contact_ids[$ac['contact_id']] = TRUE;
       }
-      $unique_contact_ids[$ac['contact_id']] = TRUE;
-    }
-    // Batch fetch all unique contacts.
-    $results = civicrm_api3('Contact', 'get', ['id' => ['IN' => array_keys($unique_contact_ids)], 'return' => 'id,display_name']);
-    $contacts = [];
-    foreach ($results['values'] as $_) {
-      $contacts[$_['id']] = $_['display_name'];
-    }
+      // Batch fetch all unique contacts.
+      $results = civicrm_api3('Contact', 'get', ['id' => ['IN' => array_keys($unique_contact_ids)], 'return' => 'id,display_name']);
+      $contacts = [];
+      foreach ($results['values'] as $_) {
+        $contacts[$_['id']] = $_['display_name'];
+      }
 
-    // Get activity type definitions.
-    $results = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
-      'return' => array("value", "label"),
-      'option_group_id' => "activity_type",
-      'value' => ['IN' => array_keys($activity_types)]
-    ]);
-    foreach ($results['values'] as $_) {
-      $activity_types[$_['value']] = $_['label'];
-    }
+      // Get activity type definitions.
+      $results = civicrm_api3('OptionValue', 'get', [
+        'sequential' => 1,
+        'return' => array("value", "label"),
+        'option_group_id' => "activity_type",
+        'value' => ['IN' => array_keys($activity_types)]
+      ]);
+      foreach ($results['values'] as $_) {
+        $activity_types[$_['value']] = $_['label'];
+      }
 
-    // Merge contact names into activities.
-    foreach ($activities as &$activity) {
-      // Activity type.
-      $activity['activity_type'] = $activity_types[$activity['activity_type_id']];
-      // Contacts.
-      foreach (['assignees', 'targets'] as $type) {
-        foreach (array_keys($activity[$type]) as $contact_id) {
-          $activity[$type][$contact_id] = $contacts[$contact_id];
+      // Merge contact names into activities.
+      foreach ($activities as &$activity) {
+        // Activity type.
+        $activity['activity_type'] = $activity_types[$activity['activity_type_id']];
+        // Contacts.
+        foreach (['assignees', 'targets'] as $type) {
+          foreach (array_keys($activity[$type]) as $contact_id) {
+            $activity[$type][$contact_id] = $contacts[$contact_id];
+          }
         }
       }
-    }
 
-    usort($activities, function($a, $b) {
-      return strcasecmp($a['activity_date_time'], $b['activity_date_time']);
-    });
+      usort($activities, function($a, $b) {
+        return strcasecmp($a['activity_date_time'], $b['activity_date_time']);
+      });
+
+    }
 
     $data['related_activities'] = array_values($activities);
 

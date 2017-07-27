@@ -11,7 +11,7 @@
       },
       // This directive has its own controller.
       controller: ['$scope', function ($scope) {
-        console.log("pelfFunding directive", $scope.funding, $scope.activityId);
+        console.log("pelfFunding directive", $scope.funding, $scope.activityId, $scope);
         $scope.crmUrl = CRM.url;
         $scope.selected = null;
         $scope.editRow = function(part) {

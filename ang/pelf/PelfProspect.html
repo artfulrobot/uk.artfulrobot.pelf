@@ -1,4 +1,4 @@
-<div class="pelf-prospect" pelf-greedy ng-if="prospect">
+<div class="pelf-prospect" pelf-greedy ng-show="prospect">
   <h1 crm-page-title >{{ prospect.subject ? 'Prospect: ' + prospect.subject : 'New prospect' }}</h1>
 
   <div class="pelf-page-actions">
@@ -8,6 +8,7 @@
       <a href class="pelf-edit" ng-click="editSave()" >Save Edits</a>
     </div>
   </div>
+
 
   <!-- Name Edit form -->
   <form class="pelf-name" crm-ui-id-scope ng-show="editData"  >
@@ -32,7 +33,6 @@
       </div>
     </div>
     <div class="pelf-column-2" >
-      <pre>{{ orgsListEditStart |json }}</pre>
       <pelf-orgs-list activity="prospect"
         edit-start="orgsListEditStart"
         edit-save="orgsListEditSave"
@@ -91,7 +91,7 @@
   </div>
 
 
-  <div class="pelf-row">
+  <div class="pelf-row" ng-show="prospect.id">
     <div class="pelf-column-1">
       <h2>Coming up</h2>
     </div>

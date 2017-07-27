@@ -12,7 +12,7 @@
         editCancel : '=',
         editSave   : '=',
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.crmUrl = CRM.url;
         console.log("orgslist controller", $scope);
 
@@ -88,7 +88,7 @@
           $scope.editStart();
         }
         console.log("orgs list controller ends");
-      },
+      }],
       templateUrl: '~/pelf/OrgsList.html'
     };
   });
