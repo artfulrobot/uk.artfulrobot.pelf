@@ -57,16 +57,19 @@ function pelf_install_demo() {
     [ 'organization_name' => 'Funder A', 'contact_type' => 'Organization']
   );
 
+  $pelf = CRM_Pelf::service();
   // Create prospect.
   $prospect = pelf_get_or_create('Activity',
     [
       'source_contact_id'  => 1,
       "activity_type_id"   => "pelf_prospect_activity_type",
       'activity_date_time' => '2017-05-01',
+    ],
+    [
       'subject'            => 'Demo prospect',
       'target_id'          => $funder['id'],
-      CRM_Pelf::getFieldId('pelf_prospect_scale') => '20',
-      CRM_Pelf::getFieldId('pelf_est_amount') => '10000',
+      $pelf->getApiFieldName('pelf_prospect_scale') => '20',
+      $pelf->getApiFieldName('pelf_est_amount') => '10000',
     ]
   );
   print "Prospect: $prospect[id]\n";

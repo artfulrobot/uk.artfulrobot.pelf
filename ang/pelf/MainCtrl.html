@@ -1,8 +1,20 @@
 <div class="pelf-main" pelf-greedy>
   <h1 crm-page-title >Pelf</h1>
 
-  <a href class="pelf-edit" ng-click="prospectAdd()" >Add Prospect</a>
+  Summary:
 
-  <demo-main-thing></demo-main-thing>
+  <a href class="pelf-edit" ng-click="prospectAdd()" >Add Prospect</a>
+  <table>
+    <tr>
+      <th>Stage</th>
+      <th ng-repeat="financial_year in financialYears()" >{{ financial_year }}</th>
+    </tr>
+    <tr ng-repeat="stage in prospectStages()" >
+      <td>{{stage}}</td>
+      <td ng-repeat="financial_year in financialYears()">&pound;{{ summary.prospects_by_fy[financial_year][stage].scaled.toLocaleString() }}</td>
+    </tr>
+  </table>
+
+  <pre>{{ summary|json }}</pre>
 </div>
 

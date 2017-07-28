@@ -33,20 +33,21 @@ function _civicrm_api3_activity_Getpelfprospect_spec(&$spec) {
 function civicrm_api3_activity_Getpelfprospect($params) {
 
   $_ = ['id' => $params['id']];
-  $stage       = CRM_Pelf::getFieldId('pelf_stage');
-  $est_amount  = CRM_Pelf::getFieldId('pelf_est_amount');
-  $scale       = CRM_Pelf::getFieldId('pelf_prospect_scale');
+  $pelf       = CRM_Pelf::service();
+  $stage      = $pelf->getApiFieldName('pelf_stage');
+  $est_amount = $pelf->getApiFieldName('pelf_est_amount');
+  $scale      = $pelf->getApiFieldName('pelf_prospect_scale');
   // Set up default return data.
   $data = [
     'id' => null,
-    'activity_type_id' => CRM_Pelf::getProspectActivityType(),
+    'activity_type_id' => $pelf->getProspectActivityType(),
     'contactWith' => [],
     'date' => date('Y-m-d H:i:s'),
     'details' => '',
     'est_amount' => '',
     'funding' => [],
     'related_activities' => [],
-    'stage' => 'speculative',
+    'stage' => '00_speculative',
     'subject' => '',
     'field_map' => [
       'stage'      => $stage,
@@ -70,7 +71,7 @@ function civicrm_api3_activity_Getpelfprospect($params) {
 
   $activity    = civicrm_api3('Activity', 'getsingle', $_);
   $_['return'] = "id,activity_type_id,subject,activity_date_time,details,$stage,$est_amount,$scale";
-  if ($activity['activity_type_id'] != CRM_Pelf::getProspectActivityType()) {
+  if ($activity['activity_type_id'] != $pelf->getProspectActivityType()) {
     throw new API_Exception("Not a Prospect");
   }
 

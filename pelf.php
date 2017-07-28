@@ -71,15 +71,7 @@ function pelf_civicrm_install() {
     ['name' => 'pelf_stage_opts'],
     ['title' => 'Stage', 'is_active' => 1]);
   $weight = 0;
-  foreach ([
-    "speculative"  => "Speculative; Seeking Invitation",
-    "writing"      => "Writing proposal/tender",
-    "waiting"      => "Awaiting result",
-    "successful"   => "Successful",
-    "unsuccessful" => "Unsuccessful",
-    "dropped"      => "Dropped by us",
-    "negotiating"  => "Negotiating",
-  ] as $name => $label) {
+  foreach (CRM_Pelf::$prospect_stages as $name => $label) {
     pelf_get_or_create('OptionValue',
       [ 'option_group_id' => "pelf_stage_opts", 'name' => $name, ],
       [ 'label' => $label, 'value' => $name, 'weight' => $weight++, ]);
@@ -89,14 +81,15 @@ function pelf_civicrm_install() {
     'name'            => "pelf_stage",
     'custom_group_id' => $prospect_customgroup['id'],
     'data_type'       => "String",
+    ],[
     'html_type'       => "Select",
     'is_required'     => "1",
     'is_searchable'   => "1",
-    'default_value'   => "speculative",
+    'default_value'   => "00_speculative",
     'text_length'     => "30",
     'option_group_id' => $stage_opts_group['id'],
-  ],
-  ['label' => 'Stage']);
+    'label'           => 'Stage',
+  ]);
 
   // Add the Est Worth field.
   $prospect_field_worth = pelf_get_or_create('CustomField', [
@@ -157,6 +150,11 @@ function pelf_civicrm_install() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function pelf_civicrm_uninstall() {
+
+  $fields = civicrm_api3('CustomGroup', 'get', ['name' => ['IN' => ['pelf_prospect', 'pelf_contract']]]);
+  foreach ($fields['values'] as $_) {
+    civicrm_api3('CustomGroup', 'delete', ['id' => (int) $_['id']]);
+  }
   _pelf_civix_civicrm_uninstall();
 }
 
