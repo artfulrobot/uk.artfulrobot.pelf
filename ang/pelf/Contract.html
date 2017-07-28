@@ -1,0 +1,93 @@
+<div class="pelf-contract" pelf-greedy ng-show="contract">
+  <h1 crm-page-title >{{ contract.subject ? 'Contract: ' + contract.subject : 'New contract' }}</h1>
+
+  <div class="pelf-page-actions">
+    <a href class="pelf-edit" ng-show="editData === false" ng-click="editStart()" >Edit</a>
+    <div ng-show="editData" >
+      <a href class="pelf-edit" ng-click="editCancel()" >Cancel Edits</a> |
+      <a href class="pelf-edit" ng-click="editSave()" >Save Edits</a>
+    </div>
+  </div>
+
+
+  <!-- Name Edit form -->
+  <form class="pelf-name" crm-ui-id-scope ng-show="editData"  >
+    <div>
+      <label crm-ui-for="name">contract Name</label>
+      <input crm-ui-id="name" ng-model="editData.name" name="contract_name"/>
+    </div>
+  </form>
+
+  <div class="pelf-row">
+    <div class="pelf-column-1" >
+    </div>
+    <div class="pelf-column-2" >
+      <pelf-orgs-list activity="contract"
+        edit-start="orgsListEditStart"
+        edit-save="orgsListEditSave"
+        edit-cancel="orgsListEditCancel"
+        ></pelf-orgs-list>
+      <div class="pelf-date">
+        <span ng-if="!editData" >Since {{ formatDate(contract.date) }}</span>
+        <!-- Date Edit form -->
+        <form crm-ui-id-scope ng-if="editData"  >
+          <div >
+            <label crm-ui-for='date' >Date contract agreed</label>
+            <input crm-ui-datepicker="{time:false}" crm-ui-id="date" ng-model="editData.when"/>
+          </div>
+        </form>
+      </div>
+
+      <div ng-if="!editData" ng-bind-html="contract.details" pelf-expander="5rem" ></div>
+
+      <form crm-ui-id-scope ng-show="editData"  >
+        <div>
+          <label crm-ui-for="details">Details, notes</label>
+          <textarea crm-ui-id="details" crm-ui-richtext name="body_html" ng-model="editData.details"></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- amounts -->
+  <div class="pelf-row">
+    <div class="pelf-column-1" >
+      <div class="pelf-amount-wrapper" >
+        <h2>&pound;{{ sumFunding() }}</h2>
+      </div>
+    </div>
+    <div class="pelf-column-2" >
+      <pelf-funding activity-id="contract.id" funding="contract.funding" ng-show="contract.id" />
+    </div>
+  </div>
+
+  <div class="pelf-row" ng-show="contract.id">
+    <div class="pelf-column-1">
+      <h2>Coming up</h2>
+    </div>
+    <div class="pelf-column-2">
+      <table>
+        <thead><tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Subject</th>
+            <th>With</th>
+        </tr></thead>
+        <tbody>
+          <tr ng-repeat="activity in contract.related_activities" >
+            <td>{{formatDate(activity.activity_date_time)}}</td>
+            <td>{{activity.activity_type}}</td>
+            <td>{{activity.subject}}</td>
+            <td>
+              <div ng-repeat="(contact_id, name) in activity.targets">
+                <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact_id}) }}" >{{name}}</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

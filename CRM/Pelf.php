@@ -150,11 +150,10 @@ class CRM_Pelf
    */
   public function getSummary() {
 
+    // Prospects.
     $prospect_table = $this->getTableName('pelf_prospect');
     $data =  [];
     $stage = $this->getFieldColumnName('pelf_stage');
-
-    // Count contracts.
     $params = [];
     // We know this is SQL safe because it's defined above in code with this in mind :-)
     $prospect_statuses = "'" . implode("','", static::$prospect_statuses_live) . "'";
@@ -165,7 +164,7 @@ class CRM_Pelf
       INNER JOIN civicrm_pelffunding f ON p.entity_id = f.activity_id
       WHERE $stage IN ($prospect_statuses)
       GROUP BY financial_year, $stage
-      ORDER BY financial_year DESC
+      ORDER BY financial_year DESC, $stage
       ";
     foreach (CRM_Core_DAO::executeQuery($sql, [])->fetchAll() as $row) {
       $data['prospects_by_fy'][$row['fy']][$row['stage']] = [
@@ -173,6 +172,24 @@ class CRM_Pelf
         'gross'  => (double) $row['gross'],
       ];
     }
+
+
+    // Contracts.
+    $contract_table = $this->getTableName('pelf_contract');
+    $contract_activity_type = $this->getContractActivityType();
+    $params = [];
+    $sql = "SELECT financial_year fy, SUM(amount) amount
+      FROM civicrm_activity c
+      INNER JOIN civicrm_pelffunding f ON c.id = f.activity_id
+      WHERE activity_type_id = $contract_activity_type
+      GROUP BY financial_year
+      ORDER BY financial_year DESC
+      ";
+error_log(strtr($sql,["\n"=>""]));
+    foreach (CRM_Core_DAO::executeQuery($sql, [])->fetchAll() as $row) {
+      $data['contracts_by_fy'][$row['fy']] = $row['amount'];
+    }
+
     return $data;
   }
 }

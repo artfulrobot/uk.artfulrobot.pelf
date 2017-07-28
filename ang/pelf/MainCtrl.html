@@ -4,17 +4,22 @@
   Summary:
 
   <a href class="pelf-edit" ng-click="prospectAdd()" >Add Prospect</a>
+  <a href class="pelf-edit" ng-click="contractAdd()" >Add Contract</a>
   <table>
     <tr>
-      <th>Stage</th>
+      <th></th>
       <th ng-repeat="financial_year in financialYears()" >{{ financial_year }}</th>
     </tr>
-    <tr ng-repeat="stage in prospectStages()" >
-      <td>{{stage}}</td>
+    <tr><td>Contracts</td>
+      <td ng-repeat="amount in summary.contracts_by_fy" >&pound;{{amount}}</td>
+    <tr>
+    <tr><td>Prospects</td>
+      <td ng-repeat="financial_year in financialYears()" >&pound;{{ prospectSubtotal(financial_year) }}</td>
+    <tr>
+    <tr ng-repeat="stage in prospectStages()" class="pelf-greyed" >
+      <td>&nbsp; &nbsp; {{ friendlyProspectStage(stage) }}</td>
       <td ng-repeat="financial_year in financialYears()">&pound;{{ summary.prospects_by_fy[financial_year][stage].scaled.toLocaleString() }}</td>
     </tr>
   </table>
-
-  <pre>{{ summary|json }}</pre>
 </div>
 
