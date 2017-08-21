@@ -1,5 +1,6 @@
 <div class="pelf-prospect" pelf-greedy ng-show="prospect">
   <h1 crm-page-title >{{ prospect.subject ? 'Prospect: ' + prospect.subject : 'New prospect' }}</h1>
+  <div pelf-nav crumbs="[ {path:'#/pelf/prospects', name: 'Prospects'}]" actions="[]" ></div>
 
   <div class="pelf-page-actions">
     <a href class="pelf-edit" ng-show="editData === false" ng-click="editStart()" >Edit</a>
@@ -21,12 +22,12 @@
   <div class="pelf-row">
     <div class="pelf-column-1" >
       <div class="pelf-stage-wrapper">
-        <div ng-show="!editData" class="pelf-stage pelf-stage--{{prospect.stage}}" >{{ getStage() }}</div>
+        <div ng-show="!editData" class="pelf-stage pelf-stage--{{prospect.stage}}" >{{ pelf.friendlyProspectStage(prospect.stage) }}</div>
         <form crm-ui-id-scope ng-show="editData"  >
           <div>
             <label crm-ui-for="stage">Stage</label>
             <select crm-ui-id="stage" ng-model="editData.stage" ng-if="editData"
-               ng-options='item.value as item.label for item in prospect.stages' >
+               ng-options='machine as human for (machine, human) in pelf.prospect.stages' >
             </select>
           </div>
         </form>
@@ -118,5 +119,5 @@
       </table>
     </div>
   </div>
-
+  <pre>{{pelf|json}}</pre>
 </div>

@@ -1,18 +1,18 @@
 (function(angular, $, _) {
 
   // Nb. directive MUST start with lowercase letter.
-  angular.module('pelf').directive('pelfProspect', ['crmApi', '$timeout', '$q', 'pelf', function(crmApi, $timeout, $q, pelf) {
+  angular.module('pelf').directive('pelfProspect', ['crmApi', '$timeout', '$q', function(crmApi, $timeout, $q) {
     // ? how to tell it that it propsect is needed? where is the prospect thing?
     return {
       // The prospect (Activity.getPelfProspect) is fed in via attribute.
       scope: {
-        prospect: '='
+        prospect: '=',
+        pelf: '='
       },
       // This directive has its own controller.
-      controller: ['$scope', '$location', 'pelf', function ($scope, $location, pelf) {
-        console.log("prospect controller running", $scope);
+      controller: ['$scope', '$location', function ($scope, $location ) {
+        console.log("prospect controller running", $scope, $scope.pelf);
         $scope.crmUrl = CRM.url;
-        $scope.pelf = pelf;
 
         if (!$scope.prospect) {
           // e.g. user entered wrong URL.
@@ -30,9 +30,6 @@
           return Math.round(_.reduce(prospect.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
         };
         $scope.formatDate = CRM.utils.formatDate;
-        $scope.getStage = function() {
-          return _.find(prospect.stages, {value: prospect.stage}).label;
-        };
 
         $scope.editData = false;
         // Edit mode start.

@@ -193,19 +193,7 @@ class CRM_Pelf
       $years[$row['fy']] = TRUE;
     }
 
-/*
- This function just returns data, summaries etc. are left to angular.
-    ksort($years);
-    foreach (array_keys($years) as $fy) {
-      $data['projection_by_fy'][$fy] = 0;
-      if (!empty($data['contracts_by_fy'][$fy])) {
-        $data['projection_by_fy'][$fy] += $data['contracts_by_fy'][$fy];
-      }
-      if (!empty($data['prospects_by_fy'][$fy]['scaled'])) {
-        $data['projection_by_fy'][$fy] += $data['prospects_by_fy'][$fy]['scaled'];
-      }
-    }
- */
+    // This function just returns data, summaries etc. are left to angular.
 
     return $data;
   }

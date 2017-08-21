@@ -1,0 +1,36 @@
+<div class="pelf-prospects-list" pelf-greedy ng-show="prospects">
+  <h1 crm-page-title >Prospects</h1>
+
+  <div pelf-nav crumbs="[ {path:'#/pelf/prospects', name: 'Prospects'}]" actions="[{path:'#/pelf/prospects/add', name:'Add New Prospect'}]" ></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>Prospect</th>
+        <th>Total</th>
+        <th>Assigned</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="prospect in prospects">
+        <td>{{ pelf.friendlyProspectStage(prospect.stage) }}</td>
+        <td><a href="#/pelf/prospects/{{ prospect.id }}">{{ prospect.subject }}</a><br />
+          <span ng-repeat="contact in prospect.contactWith">
+            <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
+          </span>
+        </td>
+        <td>{{ prospect.est_amount }}</td>
+        <td>
+          <span ng-repeat="contact in prospect.contactAssigned">
+            <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pre>{{ pelf | json }}  </pre>
+  <pre>{{ prospects | json }}  </pre>
+</div>
+

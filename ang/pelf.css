@@ -1,4 +1,15 @@
 /* Add any CSS rules for Angular module "pelf" */
+/*
+ * Colours
+ *
+ * Green:
+ * - #67A231 Strong enough for lines, not strong enough for text.
+ *
+ * Amber:
+ *
+ * - #E2B236; Strong enough for lines, not strong enough for text.
+ * - #CA9407; Strong enough for text.
+ */
 .pelf-prospect {
 
 }
@@ -43,6 +54,20 @@
   line-height:1.6;
   font-size: 1.5rem;
 }
+.pelf-summary-important.pelf-contract { color: #67A231;  }
+.pelf-summary-important.pelf-prospect { color: #CA9407;  }
+.pelf-vertbar {
+  position: relative;
+  height: 100px;
+  width:100%;
+  border-bottom:solid 1px #888;
+}
+.pelf-vertbar__bar {
+  position:absolute;
+  width:100%;
+  bottom:0;
+  background-color:#ddd;
+}
 .pelf-singlebar {
   position: relative;
 }
@@ -59,9 +84,11 @@
 .pelf-singlebar__bar.pelf-range {
   width:100%;
 }
+.pelf-vertbar__bar.pelf-contract,
 .pelf-singlebar__bar.pelf-contract {
   background-color: #67A231;
 }
+.pelf-vertbar__bar.pelf-prospect,
 .pelf-singlebar__bar.pelf-prospect {
   background-color: #E2B236;
 }
@@ -157,6 +184,44 @@ form.pelf-name input {
 .pelf-date {
   margin-bottom:1rem;
 }
+
+.pelf-nav {
+  display:flex;
+  margin-bottom:0.5rem;
+}
+
+.region-content ul.pelf-nav__actions,
+ul.pelf-nav__actions,
+.region-content ul.pelf-nav__crumbs,
+ul.pelf-nav__crumbs {
+  flex:1 1 auto;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.pelf-nav li {
+  margin:0;
+  padding:0;
+  display: inline-block;
+}
+
+.pelf-nav__crumbs li:before {
+  content: '»';
+  display:inline-block;
+  padding: 0 0.5rem;
+}
+.pelf-nav__crumbs li:first-child:before {
+  content:none;
+}
+
+.region-content ul.pelf-nav__actions,
+ul.pelf-nav__actions {
+  flex:0 0 auto;
+}
+ul.pelf-nav__actions a {
+  font-weight:bold;
+}
+
 /* These are specific to Garland theme (and probably should not be here!) */
 body.pelf #sidebar-first {
   display: none;
