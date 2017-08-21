@@ -52,15 +52,18 @@
 .pelf-singlebar__bar {
   position:absolute;
   left:0;
-  top:0;
   bottom:0;
+  height:0.5rem;
   background-color:#ddd;
 }
+.pelf-singlebar__bar.pelf-range {
+  width:100%;
+}
 .pelf-singlebar__bar.pelf-contract {
-  background-color: #c8e6ad;
+  background-color: #67A231;
 }
 .pelf-singlebar__bar.pelf-prospect {
-  background-color: #e6d8ad;
+  background-color: #E2B236;
 }
 .pelf-singlebar__bar.pelf-projection {
 }

@@ -12,36 +12,32 @@
     </tr>
 
     <tr>
-      <td>Contracts</td>
+      <td>Projection</td>
       <td class="pelf-amount pelf-summary-important" ng-repeat="financial_year in summary.financial_years" >
         <div class="pelf-singlebar">
+          <div class="pelf-singlebar__bar pelf-range"></div>
           <div class="pelf-singlebar__bar pelf-contract" ng-style="{width:summary.contracts_by_fy[financial_year] / summary.bar_scale + '%'}"></div>
-          <div class="pelf-singlebar__text">&pound;{{ summary.contracts_by_fy[financial_year] | localeNumber }}</div>
+          <div class="pelf-singlebar__bar pelf-prospect" ng-style="{left:summary.contracts_by_fy[financial_year] / summary.bar_scale + '%', width:summary.prospects_total_by_fy[financial_year] / summary.bar_scale + '%'}"></div>
+          <div class="pelf-singlebar__text">&pound;{{ summary.projection_by_fy[financial_year] | localeNumber }}</div>
         </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Contracts</td>
+      <td class="pelf-amount pelf-summary-important" ng-repeat="financial_year in summary.financial_years" >
+      &pound;{{ summary.contracts_by_fy[financial_year] | localeNumber }}
     <tr>
 
     <tr>
       <td>Prospects</td>
       <td class="pelf-amount pelf-summary-important" ng-repeat="financial_year in summary.financial_years" >
-        <div class="pelf-singlebar">
-          <div class="pelf-singlebar__bar pelf-prospect" ng-style="{width:summary.prospects_total_by_fy[financial_year] / summary.bar_scale + '%'}"></div>
-          <div class="pelf-singlebar__text">&pound;{{ summary.prospects_total_by_fy[financial_year] | localeNumber }}</div>
-        </div>
+        &pound;{{ summary.prospects_total_by_fy[financial_year] | localeNumber }}
       </td>
     <tr>
     <tr ng-repeat="stage in summary.prospect_stages" class="pelf-greyed" >
       <td>&nbsp; &nbsp; {{ friendlyProspectStage(stage) }}</td>
       <td class="pelf-amount" ng-repeat="financial_year in summary.financial_years">&pound;{{ summary.prospects_by_fy[financial_year][stage].scaled || 0 | localeNumber }}</td>
-    </tr>
-    <tr>
-      <td>Projection</td>
-      <td class="pelf-amount pelf-summary-important" ng-repeat="financial_year in summary.financial_years"
-        >
-        <div class="pelf-singlebar">
-          <div class="pelf-singlebar__bar pelf-projection" ng-style="{width:summary.projection_by_fy[financial_year] / summary.bar_scale + '%'}"></div>
-          <div class="pelf-singlebar__text">&pound;{{ summary.projection_by_fy[financial_year] | localeNumber }}</div>
-        </div>
-      </td>
     </tr>
   </table>
   <pre>{{summary|json}}</pre>
