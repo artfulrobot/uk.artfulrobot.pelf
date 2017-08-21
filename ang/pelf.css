@@ -37,7 +37,34 @@
 .crm-container th.pelf-amount
 {
   white-space: nowrap;
+  text-align:right;
 }
+.pelf-summary-important {
+  line-height:1.6;
+  font-size: 1.5rem;
+}
+.pelf-singlebar {
+  position: relative;
+}
+.pelf-singlebar__text {
+  position: relative;
+}
+.pelf-singlebar__bar {
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  background-color:#ddd;
+}
+.pelf-singlebar__bar.pelf-contract {
+  background-color: #c8e6ad;
+}
+.pelf-singlebar__bar.pelf-prospect {
+  background-color: #e6d8ad;
+}
+.pelf-singlebar__bar.pelf-projection {
+}
+
 .pelf-values ul,
 .region-content .pelf-values ul {
 }

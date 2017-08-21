@@ -155,6 +155,7 @@ class CRM_Pelf
     $data =  [];
     $stage = $this->getFieldColumnName('pelf_stage');
     $params = [];
+    $years = [];
     // We know this is SQL safe because it's defined above in code with this in mind :-)
     $prospect_statuses = "'" . implode("','", static::$prospect_statuses_live) . "'";
     $scale = $this->getFieldColumnName('pelf_prospect_scale');
@@ -167,6 +168,7 @@ class CRM_Pelf
       ORDER BY financial_year DESC, $stage
       ";
     foreach (CRM_Core_DAO::executeQuery($sql, [])->fetchAll() as $row) {
+      $years[$row['fy']] = TRUE;
       $data['prospects_by_fy'][$row['fy']][$row['stage']] = [
         'scaled' => (double) $row['scaled'],
         'gross'  => (double) $row['gross'],
@@ -185,10 +187,25 @@ class CRM_Pelf
       GROUP BY financial_year
       ORDER BY financial_year DESC
       ";
-error_log(strtr($sql,["\n"=>""]));
+
     foreach (CRM_Core_DAO::executeQuery($sql, [])->fetchAll() as $row) {
-      $data['contracts_by_fy'][$row['fy']] = $row['amount'];
+      $data['contracts_by_fy'][$row['fy']] = (double) $row['amount'];
+      $years[$row['fy']] = TRUE;
     }
+
+/*
+ This function just returns data, summaries etc. are left to angular.
+    ksort($years);
+    foreach (array_keys($years) as $fy) {
+      $data['projection_by_fy'][$fy] = 0;
+      if (!empty($data['contracts_by_fy'][$fy])) {
+        $data['projection_by_fy'][$fy] += $data['contracts_by_fy'][$fy];
+      }
+      if (!empty($data['prospects_by_fy'][$fy]['scaled'])) {
+        $data['projection_by_fy'][$fy] += $data['prospects_by_fy'][$fy]['scaled'];
+      }
+    }
+ */
 
     return $data;
   }
