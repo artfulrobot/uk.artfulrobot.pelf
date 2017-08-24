@@ -5,11 +5,6 @@
  */
 class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
 
-  public function __construct() {
-    $this->data = $this->getDefaultData();
-    $this->activity_type_id = $this->data['activity_type_id'];
-  }
-
   public function getDefaultData() {
     // Set up default data.
     return [
@@ -44,4 +39,29 @@ class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
     return $api_params;
   }
 
+  /**
+   * Import the result of an API get activity request into this object.
+   */
+  public function importBaseData($activity) {
+    $pelf = CRM_Pelf::service();
+    $stage      = $pelf->getApiFieldName('pelf_stage');
+    $est_amount = $pelf->getApiFieldName('pelf_est_amount');
+    $scale      = $pelf->getApiFieldName('pelf_prospect_scale');
+    $this->data = $this->getDefaultData();
+    // Map the API result to something more manageable.
+    foreach ([
+      'id', 'subject', 'details',
+      $stage               => 'stage',
+      $est_amount          => 'est_amount',
+      $scale               => 'scale',
+      'activity_date_time' => 'date',
+      ] as $i => $out) {
+
+      if (is_int($i)) {
+        $i = $out;
+      }
+      $this->data[$out] = isset($activity[$i]) ? $activity[$i] : NULL;
+    }
+    return $this;
+  }
 }

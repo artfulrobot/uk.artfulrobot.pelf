@@ -2,7 +2,6 @@
 
   // Nb. directive MUST start with lowercase letter.
   angular.module('pelf').directive('pelfProspect', ['crmApi', '$timeout', '$q', function(crmApi, $timeout, $q) {
-    // ? how to tell it that it propsect is needed? where is the prospect thing?
     return {
       // The prospect (Activity.getPelfProspect) is fed in via attribute.
       scope: {
@@ -82,7 +81,6 @@
           var q = $q.when()
           .then(function() { return crmApi('Activity', 'create', params); })
           .then(function(result) {
-            console.log("contactListEditSave2", $scope.contactListEditSave);
             console.log("updating UI after save ",result, params);
             // Update the ID (essential for when we've just created a new prospect).
             prospect.id = result.id;
@@ -92,8 +90,6 @@
             prospect.stage = $scope.editData.stage;
             prospect.details = $scope.editData.details;
             prospect.date = $scope.editData.when;
-            console.log("prospect after update from save ",prospect);
-            console.log("contactListEditSave3", $scope.contactListEditSave);
           });
 
           // Now we know the activity is saved, we can save the targets.

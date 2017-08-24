@@ -1,5 +1,6 @@
 <div class="pelf-contract" pelf-greedy ng-show="contract">
   <h1 crm-page-title >{{ contract.subject ? 'Contract: ' + contract.subject : 'New contract' }}</h1>
+  <div pelf-nav crumbs="[ {path:'#/pelf/contracts', name: 'Contracts'}]" actions="[]" ></div>
 
   <div class="pelf-page-actions">
     <a href class="pelf-edit" ng-show="editData === false" ng-click="editStart()" >Edit</a>
@@ -20,12 +21,22 @@
 
   <div class="pelf-row">
     <div class="pelf-column-1" >
+      Assigned to:
+      <pelf-contact-list
+         activity="contract"
+         relationship="'assigned'"
+         edit-start="contactAssignedEditStart"
+         edit-save="contactAssignedEditSave"
+         edit-cancel="contactAssignedEditCancel"
+         ></pelf-contact-list>
     </div>
     <div class="pelf-column-2" >
-      <pelf-contact-list activity="contract"
-        edit-start="contactListEditStart"
-        edit-save="contactListEditSave"
-        edit-cancel="contactListEditCancel"
+      <pelf-contact-list
+        activity="contract"
+        relationship="'with'"
+        edit-start="contactWithEditStart"
+        edit-save="contactWithEditSave"
+        edit-cancel="contactWithEditCancel"
         ></pelf-contact-list>
       <div class="pelf-date">
         <span ng-if="!editData" >Since {{ formatDate(contract.date) }}</span>

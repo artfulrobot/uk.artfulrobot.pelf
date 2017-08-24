@@ -1,17 +1,17 @@
 (function(angular, $, _) {
 
   // Nb. directive MUST start with lowercase letter.
-  angular.module('pelf').directive('pelfContract', ['crmApi', '$timeout', '$q', 'pelf', function(crmApi, $timeout, $q, pelf) {
+  angular.module('pelf').directive('pelfContract', ['crmApi', '$timeout', '$q', function(crmApi, $timeout, $q) {
     return {
       // The contract (Activity.getPelfContract) is fed in via attribute.
       scope: {
-        contract: '='
+        contract: '=',
+        pelf: '='
       },
       // This directive has its own controller.
-      controller: ['$scope', '$location', 'pelf', function ($scope, $location, pelf) {
+      controller: ['$scope', '$location', function ($scope, $location) {
         console.log("contract controller running", $scope);
         $scope.crmUrl = CRM.url;
-        $scope.pelf = pelf;
 
         if (!$scope.contract) {
           // e.g. user entered wrong URL.
@@ -34,9 +34,13 @@
             details: contract.details,
             when: contract.date.substr(0, 10),
           };
-          if ($scope.contactListEditStart) {
+          if ($scope.contactWithEditStart) {
             // This is not defined yet in the case of a new contract.
-            $scope.contactListEditStart();
+            $scope.contactWithEditStart();
+          }
+          if ($scope.contactAssignedEditStart) {
+            // This is not defined yet in the case of a new contract.
+            $scope.contactAssignedEditStart();
           }
         };
         // Save edits.
@@ -74,7 +78,12 @@
 
           // Now we know the activity is saved, we can save the targets.
           q.then(function() {
-            return $scope.contactListEditSave();
+            // This returns a promise.
+            return $scope.contactWithEditSave();
+          })
+          .then(function() {
+            // This returns a promise.
+            return $scope.contactAssignedEditSave();
           })
           .then(function() {
             console.log("final thing");
@@ -91,7 +100,8 @@
         };
         // Cancel edits.
         $scope.editCancel = function (){
-          $scope.contactListEditCancel();
+          $scope.contactWithEditCancel();
+          $scope.contactAssignedEditCancel();
           $scope.editData = false;
         };
 

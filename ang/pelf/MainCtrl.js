@@ -57,6 +57,15 @@
       }
     });
 
+    $routeProvider.when('/pelf/contracts', {
+      controller: ['$scope', 'pelf', function($scope, pelf) {
+        $scope.pelf = pelf;
+      }],
+      resolve: { pelf: 'pelf' },
+      template: '<pelf-contracts-list pelf="pelf"></pelf-contracts-list>'
+    });
+
+
     $routeProvider.when('/pelf/contracts/:id', {
       template: '<pelf-contract contract="contract" ></pelf-contract>',
       controller: function($scope, $route, contract) {
