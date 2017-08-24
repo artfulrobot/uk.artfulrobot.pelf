@@ -34,7 +34,7 @@
         $scope.editData = false;
         // Edit mode start.
         $scope.editStart = function() {
-          console.log("orgsListEditSave4", $scope.orgsListEditSave);
+          console.log("contactListEditSave4", $scope.contactListEditSave);
           $scope.editData = {
             name: prospect.subject,
             est_amount: prospect.est_amount,
@@ -43,16 +43,16 @@
             details: prospect.details,
             when: prospect.date.substr(0, 10),
           };
-          if ($scope.orgsListEditStart) {
+          if ($scope.contactListEditStart) {
             // This is not defined yet in the case of a new prospect.
-            $scope.orgsListEditStart();
+            $scope.contactListEditStart();
           }
         };
         // Save edits.
         $scope.editSave = function() {
 
           var isNewProspect = (prospect.id === null);
-          console.log("orgsListEditSave1", $scope.orgsListEditSave);
+          console.log("contactListEditSave1", $scope.contactListEditSave);
 
           var params = {
             subject: $scope.editData.name,
@@ -78,7 +78,7 @@
           var q = $q.when()
           .then(function() { return crmApi('Activity', 'create', params); })
           .then(function(result) {
-            console.log("orgsListEditSave2", $scope.orgsListEditSave);
+            console.log("contactListEditSave2", $scope.contactListEditSave);
             console.log("updating UI after save ",result, params);
             // Update the ID (essential for when we've just created a new prospect).
             prospect.id = result.id;
@@ -89,12 +89,12 @@
             prospect.details = $scope.editData.details;
             prospect.date = $scope.editData.when;
             console.log("prospect after update from save ",prospect);
-            console.log("orgsListEditSave3", $scope.orgsListEditSave);
+            console.log("contactListEditSave3", $scope.contactListEditSave);
           });
 
           // Now we know the activity is saved, we can save the targets.
           q.then(function() {
-            return $scope.orgsListEditSave();
+            return $scope.contactListEditSave();
           })
           .then(function() {
             console.log("final thing");
@@ -111,7 +111,7 @@
         };
         // Cancel edits.
         $scope.editCancel = function (){
-          $scope.orgsListEditCancel();
+          $scope.contactListEditCancel();
           $scope.editData = false;
         };
 
@@ -129,7 +129,7 @@
           });
         }
       },
-      templateUrl: '~/pelf/PelfProspect.html',
+      templateUrl: '~/pelf/Prospect.html',
     };
   }]);
 

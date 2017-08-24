@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // Nb. directive MUST start with lowercase letter.
-  angular.module('pelf').directive('pelfOrgsList', function(crmApi, $q) {
+  angular.module('pelf').directive('pelfContactList', function(crmApi, $q) {
     return {
       // The activity is fed in via attribute.
       // The other vars are also bound by attribute name. This means we can
@@ -89,7 +89,7 @@
         }
         console.log("orgs list controller ends");
       }],
-      templateUrl: '~/pelf/OrgsList.html'
+      templateUrl: '~/pelf/ContactList.html'
     };
   });
 

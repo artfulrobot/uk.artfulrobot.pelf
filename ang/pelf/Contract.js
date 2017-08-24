@@ -34,9 +34,9 @@
             details: contract.details,
             when: contract.date.substr(0, 10),
           };
-          if ($scope.orgsListEditStart) {
+          if ($scope.contactListEditStart) {
             // This is not defined yet in the case of a new contract.
-            $scope.orgsListEditStart();
+            $scope.contactListEditStart();
           }
         };
         // Save edits.
@@ -74,7 +74,7 @@
 
           // Now we know the activity is saved, we can save the targets.
           q.then(function() {
-            return $scope.orgsListEditSave();
+            return $scope.contactListEditSave();
           })
           .then(function() {
             console.log("final thing");
@@ -91,7 +91,7 @@
         };
         // Cancel edits.
         $scope.editCancel = function (){
-          $scope.orgsListEditCancel();
+          $scope.contactListEditCancel();
           $scope.editData = false;
         };
 

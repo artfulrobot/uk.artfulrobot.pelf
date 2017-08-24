@@ -81,7 +81,7 @@
           $scope.selected = null;
         };
       }],
-      templateUrl: '~/pelf/PelfFunding.html',
+      templateUrl: '~/pelf/Funding.html',
     };
   });
 
@@ -91,7 +91,7 @@
       scope: { editRow: '=editRow'},
       // what does this do transclude: true,
       require: '^^pelfFunding',
-      templateUrl: '~/pelf/PelfFundingEdit.html',
+      templateUrl: '~/pelf/FundingEdit.html',
       link: function(scope, el, attrs, editor) {
         console.log("link: saveEdits:", editor);
         scope.saveEdits = editor.saveEdits;

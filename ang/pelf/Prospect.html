@@ -34,11 +34,11 @@
       </div>
     </div>
     <div class="pelf-column-2" >
-      <pelf-orgs-list activity="prospect"
-        edit-start="orgsListEditStart"
-        edit-save="orgsListEditSave"
-        edit-cancel="orgsListEditCancel"
-        ></pelf-orgs-list>
+      <pelf-contact-list activity="prospect"
+        edit-start="contactListEditStart"
+        edit-save="contactListEditSave"
+        edit-cancel="contactListEditCancel"
+        ></pelf-contact-list>
       <div class="pelf-date">
         <span ng-if="!editData" >Since {{ formatDate(prospect.date) }}</span>
         <!-- Date Edit form -->

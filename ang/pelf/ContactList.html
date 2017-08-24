@@ -1,6 +1,6 @@
-<ul class="pelf-org-list" ng-show="!editData">
+<ul class="pelf-contact-list" ng-show="!editData">
   <li ng-repeat="(o, i) in activity.contactWith" >
-    <a class="pelf-org" ng-if="!orgsListEditMode" href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: i.contact_id}) }}">{{i.display_name}}</a>
+    <a class="pelf-org" ng-if="!contactListEditMode" href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: i.contact_id}) }}">{{i.display_name}}</a>
   </li>
 </ul>
 <form crm-ui-id-scope ng-if="editData"  >
