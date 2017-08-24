@@ -43,9 +43,13 @@
             details: prospect.details,
             when: prospect.date.substr(0, 10),
           };
-          if ($scope.contactListEditStart) {
+          if ($scope.contactWithEditStart) {
             // This is not defined yet in the case of a new prospect.
-            $scope.contactListEditStart();
+            $scope.contactWithEditStart();
+          }
+          if ($scope.contactAssignedEditStart) {
+            // This is not defined yet in the case of a new prospect.
+            $scope.contactAssignedEditStart();
           }
         };
         // Save edits.
@@ -64,9 +68,9 @@
             params.id = prospect.id;
           }
 
-          params[prospect.field_map.est_amount] = $scope.editData.est_amount;
-          params[prospect.field_map.scale] = $scope.editData.scale;
-          params[prospect.field_map.stage] = $scope.editData.stage;
+          params[$scope.pelf.prospect.apiFieldNames.pelf_est_amount] = $scope.editData.est_amount;
+          params[$scope.pelf.prospect.apiFieldNames.pelf_scale] = $scope.editData.scale;
+          params[$scope.pelf.prospect.apiFieldNames.pelf_stage] = $scope.editData.stage;
 
           // Note to self.  crmApi returns a *promise*, not a function that
           // *returns* a promise.  So you can't chain them like
@@ -94,7 +98,12 @@
 
           // Now we know the activity is saved, we can save the targets.
           q.then(function() {
-            return $scope.contactListEditSave();
+            // This returns a promise.
+            return $scope.contactWithEditSave();
+          })
+          .then(function() {
+            // This returns a promise.
+            return $scope.contactAssignedEditSave();
           })
           .then(function() {
             console.log("final thing");
@@ -111,7 +120,8 @@
         };
         // Cancel edits.
         $scope.editCancel = function (){
-          $scope.contactListEditCancel();
+          $scope.contactWithEditCancel();
+          $scope.contactAssignedEditCancel();
           $scope.editData = false;
         };
 

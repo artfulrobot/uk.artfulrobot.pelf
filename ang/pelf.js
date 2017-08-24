@@ -37,8 +37,9 @@
     // Fetch config, when we've got it, instantiate the object and return it.
     return crmApi('Pelf', 'GetConfig', {})
       .then(function(config) {
-        console.log("Pelf resolving ");
-        return new Pelf(config);
+        var pelf = new Pelf(config);
+        console.log("Pelf resolved: ", pelf);
+        return pelf;
       });
   }])
   ;

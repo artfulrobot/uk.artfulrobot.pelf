@@ -1,11 +1,12 @@
-<ul class="pelf-contact-list" ng-show="!editData">
-  <li ng-repeat="(o, i) in activity.contactWith" >
-    <a class="pelf-org" ng-if="!contactListEditMode" href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: i.contact_id}) }}">{{i.display_name}}</a>
+<ul class="pelf-contact-list {{ relationship }}" ng-show="!editData">
+  <li ng-repeat="(o, i) in contacts" >
+    <a ng-if="!contactListEditMode" href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: i.contact_id}) }}">{{i.display_name}}</a>
   </li>
 </ul>
 <form crm-ui-id-scope ng-if="editData"  >
   <div>
-    <label crm-ui-for="contactTargets" >Organisation(s)/Funder(s)</label>
+    <label ng-show="relationship == 'with'" crm-ui-for="contactTargets" >Organisation(s)/Funder(s)</label>
+    <label ng-show="relationship == 'assigned'" crm-ui-for="contactTargets" >Assigned To</label>
     <input crm-ui-id="contactTargets"
       crm-entityref="{entity: 'Contact', select: {allowClear:false, multiple:true}, api: {contact_type: 'Organization'}}"
       ng-model="editData.v" />

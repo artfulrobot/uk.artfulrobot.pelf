@@ -98,16 +98,22 @@
 .pelf-values ul,
 .region-content .pelf-values ul {
 }
-.pelf-org-list ul.pelf-org-list,
-.region-content ul.pelf-org-list {
+ul.pelf-contact-list,
+.region-content ul.pelf-contact-list {
   margin:0;
   padding:0;
 }
-.pelf-org-list a.pelf-org {
+ul.pelf-contact-list.assigned  {
+  display: inline-block;
+}
+ul.pelf-contact-list.assigned li {
+  display: inline-block;
+}
+.pelf-contact-list.with a {
   font-size:1.4rem;
   line-height:1.4;
 }
-ul.pelf-org-list li {
+ul.pelf-contact-list li {
   list-style:none;
   padding:0;
   margin-bottom:0.4em;

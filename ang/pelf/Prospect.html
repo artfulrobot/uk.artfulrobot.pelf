@@ -31,13 +31,24 @@
             </select>
           </div>
         </form>
+        <br />
+        Assigned to:
+        <pelf-contact-list
+          activity="prospect"
+          relationship="'assigned'"
+          edit-start="contactAssignedEditStart"
+          edit-save="contactAssignedEditSave"
+          edit-cancel="contactAssignedEditCancel"
+          ></pelf-contact-list>
       </div>
     </div>
     <div class="pelf-column-2" >
-      <pelf-contact-list activity="prospect"
-        edit-start="contactListEditStart"
-        edit-save="contactListEditSave"
-        edit-cancel="contactListEditCancel"
+      <pelf-contact-list
+        activity="prospect"
+        relationship="'with'"
+        edit-start="contactWithEditStart"
+        edit-save="contactWithEditSave"
+        edit-cancel="contactWithEditCancel"
         ></pelf-contact-list>
       <div class="pelf-date">
         <span ng-if="!editData" >Since {{ formatDate(prospect.date) }}</span>
