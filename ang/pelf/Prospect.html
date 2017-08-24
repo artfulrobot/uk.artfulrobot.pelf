@@ -78,23 +78,17 @@
   <div class="pelf-row">
     <div class="pelf-column-1" >
       <div class="pelf-amount-wrapper" >
-        <h2>&pound;{{ prospect.est_amount | localeNumber }}</h2>
+        <h2>&pound;{{ sumFunding() | localeNumber }}</h2>
         <div ng-show="!editData" >
           @ {{ prospect.scale }}%, est worth: &pound;{{ estWorth() | localeNumber }}
         </div>
         <!-- Amount Edit form -->
         <form crm-ui-id-scope ng-show="editData"  >
           <div>
-            <label crm-ui-for="est_amount">Est. Amount</label>
-            <input crm-ui-id="est_amount" type="number" ng-model="editData.est_amount"/>
-          </div>
-          <div>
             <label crm-ui-for="est_amount">Liklihood %</label>
             <input crm-ui-id="scale" type="number" max="100" min="1" ng-model="editData.scale"/>
           </div>
         </form>
-        <div class="crm-error" ng-show="sumFunding() < prospect.est_amount">&pound;{{ prospect.est_amount - sumFunding() }} is not allocated.</div>
-        <div class="crm-error" ng-show="sumFunding() > prospect.est_amount">&pound;{{ sumFunding() - prospect.est_amount }} less than allocated.</div>
       </div>
     </div>
     <div class="pelf-column-2" >

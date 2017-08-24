@@ -21,10 +21,9 @@
         // This just simplifies the code below.
         var prospect = $scope.prospect;
 
-        // Ensure est_amount is a float.
-        prospect.est_amount = parseFloat(prospect.est_amount);
+        // Ensure numbers are floats.
         prospect.scale = parseFloat(prospect.scale);
-        $scope.estWorth = function() { return Math.round(prospect.est_amount * prospect.scale / 100, 0); };
+        $scope.estWorth = function() { return Math.round($scope.sumFunding()  * prospect.scale / 100, 0); };
         $scope.sumFunding = function() {
           return Math.round(_.reduce(prospect.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
         };
@@ -36,7 +35,6 @@
           console.log("contactListEditSave4", $scope.contactListEditSave);
           $scope.editData = {
             name: prospect.subject,
-            est_amount: prospect.est_amount,
             scale: prospect.scale,
             stage: prospect.stage,
             details: prospect.details,
@@ -67,7 +65,6 @@
             params.id = prospect.id;
           }
 
-          params[$scope.pelf.prospect.apiFieldNames.pelf_est_amount] = $scope.editData.est_amount;
           params[$scope.pelf.prospect.apiFieldNames.pelf_scale] = $scope.editData.scale;
           params[$scope.pelf.prospect.apiFieldNames.pelf_stage] = $scope.editData.stage;
 
@@ -85,7 +82,6 @@
             // Update the ID (essential for when we've just created a new prospect).
             prospect.id = result.id;
             prospect.subject = $scope.editData.name;
-            prospect.est_amount = $scope.editData.est_amount;
             prospect.scale = $scope.editData.scale;
             prospect.stage = $scope.editData.stage;
             prospect.details = $scope.editData.details;

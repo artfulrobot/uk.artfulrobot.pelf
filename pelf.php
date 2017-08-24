@@ -91,17 +91,6 @@ function pelf_civicrm_install() {
     'label'           => 'Stage',
   ]);
 
-  // Add the Est Worth field.
-  $prospect_field_worth = pelf_get_or_create('CustomField', [
-      'name'            => "pelf_est_amount",
-      'custom_group_id' => $prospect_customgroup['id'],
-      'data_type'       => "Float",
-      'html_type'       => "Text",
-      'is_required'     => "1",
-      'default_value'   => "0",
-    ],
-    ['label' => 'Estimated Amount', 'help_pre' => "Enter the amount you are applying/tendering for in your currency."]);
-
   // Add the prospect_scale field.
   $prospect_field_worth = pelf_get_or_create('CustomField', [
       'name'            => "pelf_prospect_scale",
@@ -115,8 +104,8 @@ function pelf_civicrm_install() {
       'label'    => 'Liklihood %',
       'help_pre' => "If you know you're going to get "
         . "this it's 100. If you know that you normally win about 15% of bids like "
-        . "this, it's 15. The Estimated Amount is multiplied by this percentage to "
-        . "give the Estimated Worth of the prospect."
+        . "this, it's 15. The prospect amounts are multiplied by this percentage to "
+        . "give the estimated worth of the prospect."
     ]);
 
   // Check the Contract Activity

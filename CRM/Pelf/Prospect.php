@@ -13,7 +13,6 @@ class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
       'contactWith' => [],
       'date' => date('Y-m-d H:i:s'),
       'details' => '',
-      'est_amount' => '',
       'funding' => [],
       'related_activities' => [],
       'stage' => '00_speculative',
@@ -28,12 +27,11 @@ class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
   public static function getBaseApiParams() {
     $pelf = CRM_Pelf::service();
     $stage      = $pelf->getApiFieldName('pelf_stage');
-    $est_amount = $pelf->getApiFieldName('pelf_est_amount');
     $scale      = $pelf->getApiFieldName('pelf_prospect_scale');
 
     // Fetch row(s).
     $api_params = [
-      'return' => "id,activity_type_id,subject,activity_date_time,details,$stage,$est_amount,$scale",
+      'return' => "id,activity_type_id,subject,activity_date_time,details,$stage,$scale",
       'activity_type_id' => $pelf->getProspectActivityType(),
     ];
     return $api_params;
@@ -45,14 +43,12 @@ class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
   public function importBaseData($activity) {
     $pelf = CRM_Pelf::service();
     $stage      = $pelf->getApiFieldName('pelf_stage');
-    $est_amount = $pelf->getApiFieldName('pelf_est_amount');
     $scale      = $pelf->getApiFieldName('pelf_prospect_scale');
     $this->data = $this->getDefaultData();
     // Map the API result to something more manageable.
     foreach ([
       'id', 'subject', 'details',
       $stage               => 'stage',
-      $est_amount          => 'est_amount',
       $scale               => 'scale',
       'activity_date_time' => 'date',
       ] as $i => $out) {
