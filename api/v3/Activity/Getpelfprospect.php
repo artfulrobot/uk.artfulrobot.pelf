@@ -52,10 +52,9 @@ function civicrm_api3_activity_Getpelfprospect($params) {
     // Single.
     $activity = CRM_Pelf_Prospect::factorySingle($params['id']);
     if (!empty($params['with_activities'])) {
-
 //      $activity->loadRelatedActivities();
     }
-    return $activity->data;
   }
+  return $activity->data;
 }
 

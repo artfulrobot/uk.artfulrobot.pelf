@@ -23,11 +23,15 @@
 
         // Ensure numbers are floats.
         prospect.scale = parseFloat(prospect.scale);
-        $scope.estWorth = function() { return Math.round($scope.sumFunding()  * prospect.scale / 100, 0); };
-        $scope.sumFunding = function() {
-          return Math.round(_.reduce(prospect.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
-        };
         $scope.formatDate = CRM.utils.formatDate;
+        // Calculated values.
+        var fundingCalcs = function() {
+          console.log("Running fundingCalcs on ", prospect.funding);
+          $scope.sumFunding = Math.round(_.reduce(prospect.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
+          $scope.estWorth = Math.round($scope.sumFunding  * prospect.scale / 100, 0);
+        };
+        $scope.$watch('prospect.funding', fundingCalcs, true);
+        $scope.$watch('prospect.scale', fundingCalcs);
 
         $scope.editData = false;
         // Edit mode start.
@@ -53,7 +57,6 @@
         $scope.editSave = function() {
 
           var isNewProspect = (prospect.id === null);
-          console.log("contactListEditSave1", $scope.contactListEditSave);
 
           var params = {
             subject: $scope.editData.name,
@@ -98,10 +101,9 @@
             return $scope.contactAssignedEditSave();
           })
           .then(function() {
-            console.log("final thing");
             if (isNewProspect) {
               // Redirect to proper path for this prospect.
-              $location.path("/pelf/prospect/" + prospect.id);
+              $location.path("/pelf/prospects/" + prospect.id);
               $location.replace();
             }
             else {
@@ -115,6 +117,13 @@
           $scope.contactWithEditCancel();
           $scope.contactAssignedEditCancel();
           $scope.editData = false;
+
+          var isNew = (prospect.id === null);
+          if (isNew) {
+            // Redirect back to prospects list.
+            $location.path("/pelf/prospects");
+            $location.replace();
+          }
         };
 
         if (!prospect.id) {

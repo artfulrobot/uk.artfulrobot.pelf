@@ -21,9 +21,12 @@
         // This just simplifies the code below.
         var contract = $scope.contract;
 
-        $scope.sumFunding = function() {
-          return Math.round(_.reduce(contract.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
+        // Calculated values.
+        var fundingCalcs = function() {
+          $scope.sumFunding = Math.round(_.reduce(contract.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
         };
+        $scope.$watch('contract.funding', fundingCalcs, true);
+
         $scope.formatDate = CRM.utils.formatDate;
 
         $scope.editData = false;
@@ -89,7 +92,7 @@
             console.log("final thing");
             if (isNewContract) {
               // Redirect to proper path for this contract.
-              $location.path("/pelf/contract/" + contract.id);
+              $location.path("/pelf/contracts/" + contract.id);
               $location.replace();
             }
             else {
@@ -103,6 +106,12 @@
           $scope.contactWithEditCancel();
           $scope.contactAssignedEditCancel();
           $scope.editData = false;
+          var isNew = (contract.id === null);
+          if (isNew) {
+            // Redirect back to prospects list.
+            $location.path("/pelf/contracts");
+            $location.replace();
+          }
         };
 
         if (!contract.id) {

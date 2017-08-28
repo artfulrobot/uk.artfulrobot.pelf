@@ -10,6 +10,7 @@ class CRM_Pelf_Prospect extends CRM_Pelf_Activity {
     return [
       'id' => null,
       'activity_type_id' => CRM_Pelf::service()->getProspectActivityType(),
+      'contactAssigned' => [],
       'contactWith' => [],
       'date' => date('Y-m-d H:i:s'),
       'details' => '',

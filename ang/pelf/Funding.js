@@ -52,7 +52,6 @@
         this.saveEdits = function(part) {
           var p;
           if (part.id) {
-            console.log("save exist");
             // Save existing data.
             p = crmApi('PelfFunding', 'create', _.assign({}, part))
             .then(function(){
@@ -60,6 +59,7 @@
               _.assign(live, part);
               sortAndGroupFunding();
               $scope.selected = null;
+              console.log("updated funding: ", $scope.funding);
             });
           }
           else {
@@ -67,7 +67,6 @@
             var row = _.assign({ activity_id: $scope.activityId, sequential: 1}, part);
             console.log("save new", row);
             p = crmApi('PelfFunding', 'create', row)
-              // xxx this then function is not being called?
             .then(function(result){
               console.log("result: ", result);
               console.log("funding: ", $scope.funding);

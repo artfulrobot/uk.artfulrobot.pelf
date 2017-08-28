@@ -40,19 +40,23 @@
         pelf: 'pelf',
         prospect: function(crmApi, $route, $location) {
           // Look up the prospect.
-          return crmApi('Activity', 'GetPelfProspect', {
+          console.log("Looking up prospect ", {
+            id: $route.current.params.id,
+            with_activities: 1
+          });
+          return crmApi('Activity', 'Getpelfprospect', {
             id: $route.current.params.id,
             with_activities: 1
           })
-            .then(function(r) {
-              console.log("prospect:" , r);
-              return r;
-            }, function(e) {
-              // @todo issue notice somehow.
-              console.warn("error", e);
-              $location.path("/pelf/");
-              $location.replace();
-            });
+          .then(function(r) {
+            console.log("GetPelfProspect returned:" , r);
+            return r;
+          }, function(e) {
+            // @todo issue notice somehow.
+            console.warn("GetPelfProspect error", e);
+            $location.path("/pelf/");
+            $location.replace();
+          });
         }
       }
     });
@@ -124,6 +128,7 @@
 
       // Generate prospect subtotals, projections etc.
       summary.prospects_total_by_fy = {};
+      summary.contracts_by_fy = {};
       summary.projection_by_fy = {};
       var max = 0;
       _.forEach(summary.financial_years, function(fy) {

@@ -3,15 +3,14 @@
   // Nb. directive MUST start with lowercase letter.
   angular.module('pelf').directive('demoMainThing', function() {
     return {
+      scope: {
+        testthing: '='
+      },
       controller: ['$scope', function ($scope) {
-        console.log("main thing controller", $scope);
-        $scope.name = "Bar";
-        $scope.callSharedMethod = function() {
-          console.log("callSharedMethod");
-          $scope.sharedMethod();
-        };
+        console.log("main thing controller", $scope.testthing);
+        $scope.testthing.push('new thing');
       }],
-      template: '<p>Main directive</p><demo-sub-thing shared-method="sharedMethod" name="name" ></demo-sub-thing><a href ng-click="callSharedMethod()" >Click me</a>'
+      template: 'demoMainThing: {{ testthing.length }}, <pre ng-click="testthing[0]=\'foo\'">{{ testthing | json }}</pre>'
     };
   });
 

@@ -1,0 +1,33 @@
+<div class="pelf-contracts-list" pelf-greedy>
+  <h1 crm-page-title >Contracts</h1>
+
+  <div pelf-nav crumbs="[ {path:'#/pelf/contracts', name: 'Contracts'}]" actions="[{path:'#/pelf/contracts/add', name:'Add New Contract'}]" ></div>
+
+  <table ng-show="contracts">
+    <thead>
+      <tr>
+        <th>Contract</th>
+        <th>Total</th>
+        <th>Assigned</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="contract in contracts">
+        <td><a href="#/pelf/contracts/{{ contract.id }}">{{ contract.subject }}</a><br />
+          <span ng-repeat="contact in contract.contactWith">
+            <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
+          </span>
+        </td>
+        <td>{{ contract.est_amount }}@todo</td>
+        <td>
+          <span ng-repeat="contact in contract.contactAssigned">
+            <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div ng-show="!contracts">No contracts yet? Keep trying, you'll get one soon I'm sure :-)</div>
+</div>
+

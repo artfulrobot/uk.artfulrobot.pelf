@@ -50,10 +50,12 @@
           var orig = _.map($scope.activity[relType], function(o) {return parseInt(o.contact_id);});
           var newVals = _.map($scope.editData.v.split(','), function(o) {return parseInt(o);});
 
-          var q = $q.when();
-          var newContactWith = [];
 
           var toDelete = _.difference(orig, newVals);
+          var toAdd = _.difference(newVals, orig);
+          console.log("ContactList " + relType + " Add: ", toAdd, " Delete: ", toDelete);
+
+          var q = $q.when();
           _.forEach(toDelete, function(contact_id) {
             // Need to know the activity_contact_id for this.
             var rel = _.find($scope.activity[relType], {contact_id: contact_id.toString() });
@@ -62,20 +64,19 @@
             }
           });
           q.then(function() {
-            // Now update our model by removing the old contactWith records.
+            // Now update our model by removing the old records.
             _.remove($scope.activity[relType], function(cw) {
                 return toDelete.indexOf(parseInt(cw.contact_id)) > -1;
               });
           });
 
-          var toAdd = _.difference(newVals, orig);
           _.forEach(toAdd, function(contact_id) {
             q.then(
               function() {
                 return crmApi('ActivityContact', 'create', {
                   contact_id: contact_id,
                   activity_id: $scope.activity.id,
-                  record_type_id: (relType == 'with' ? "Activity Targets" : 'Activity Assignees'),
+                  record_type_id: ($scope.relationship == 'with' ? "Activity Targets" : 'Activity Assignees'),
                   'api.Contact.getsingle': {id: contact_id, return:'id,display_name'},
                   sequential: 1
                 })
