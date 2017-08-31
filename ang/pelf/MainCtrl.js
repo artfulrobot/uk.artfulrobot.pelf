@@ -149,9 +149,9 @@
 
       // Generate prospect subtotals, projections etc.
       summary.prospects_total_by_fy = {};
-      summary.contracts_by_fy = {};
       summary.projection_by_fy = {};
       var max = 0;
+      console.log("FIXING ", summary);
       _.forEach(summary.financial_years, function(fy) {
 
         // Calc total prospects from all stage-subtotals.
@@ -159,7 +159,7 @@
           function(tot, row) { return tot + row.scaled; }, 0);
 
         // Initialise to 0 if no contracts in that year.
-        if (!summary.contracts_by_fy[fy]) {
+        if (! (fy in summary.contracts_by_fy)) {
           summary.contracts_by_fy[fy] = 0;
         }
 

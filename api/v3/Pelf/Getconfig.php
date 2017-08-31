@@ -30,6 +30,43 @@ function civicrm_api3_pelf_GetConfig($params) {
   foreach ($pelf->custom_fields as $name => $details) {
     $data['prospect']['apiFieldNames'][$name] = $pelf->getApiFieldName($name);
   }
+
+  // Generate a list of financial years for SELECT elements etc. starting 10
+  // years back, going 10 years forward.  Strictly speaking this being loaded
+  // once per session could be a bother to someone putting in ancient or very
+  // future data, but with 10 years scope it's probably more efficient this
+  // way.
+  $earliest_year = $latest_year = null;
+  $sql = "SELECT MIN(financial_year) min_fy, MAX(financial_year) max_fy FROM civicrm_pelffunding f";
+  $range = CRM_Core_DAO::executeQuery($sql, [])->fetchAll();
+  if ($range) {
+    $earliest_year = substr($range[0]['min_fy'], 0, 4);
+    $latest_year   = substr($range[0]['max_fy'], 0, 4);
+  }
+  $y = date('Y') - 10;
+  if ($earliest_year !== null && $y > $earliest_year) {
+    // Oh, our data goes back further than 10 years ago. Go back another 10 to be safe.
+    $y -= 10;
+  }
+  $i = 20;
+  if ($latest_year !== null && $y + $i < $latest_year) {
+    // Oh, our data goes further than 10 years hence. Go forward another 10 to be safe.
+    $i = $latest_year - $y + 10;
+  }
+  $result = civicrm_api3('Setting', 'get', ['sequential' => 1, 'return' => ["fiscalYearStart"]]);
+  $fy_spans_calendar_year = !($result['values'][0]['fiscalYearStart']['M'] == 1 && $result['values'][0]['fiscalYearStart']['d'] == 1);
+  $data['financial_years_all'] = [];
+  $data['financial_years'] = [];
+  while ($i-- > 0) {
+    $fy = (string) (($fy_spans_calendar_year) ? "$y-" . ($y+1) : $y);
+    $data['financial_years_all'][] = $fy;
+    if ($earliest_year !== null && $y >= $earliest_year
+        && $latest_year !== null && $y <= $latest_year) {
+      $data['financial_years'][] = $fy;
+    }
+    $y++;
+  }
+
   return $data;
 }
 

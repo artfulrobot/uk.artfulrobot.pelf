@@ -6,8 +6,9 @@
     return {
       // The prospect (Activity.getPelfProspect) is fed in via attribute.
       scope: {
-        activityId: '=activityId',
-        funding: '=funding'
+        activityId: '=',
+        pelf: '=',
+        funding: '='
       },
       // This directive has its own controller.
       controller: ['$scope', function ($scope) {
@@ -87,7 +88,7 @@
   // Re-useable edit form.
   angular.module('pelf').directive('pelfFundingEdit', function() {
     return {
-      scope: { editRow: '=editRow'},
+      scope: { editRow: '=', pelf: '=' },
       // what does this do transclude: true,
       require: '^^pelfFunding',
       templateUrl: '~/pelf/FundingEdit.html',

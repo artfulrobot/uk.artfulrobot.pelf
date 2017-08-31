@@ -1,8 +1,9 @@
 <td class="pelf-amount">
+  <pre>{{ pelf |json}}</pre>
   &pound;<input ng-model="editRow.amount" size="12" />
 </td>
 <td>
-  <select ng-model="editRow.financial_year" ng-options="year for year in ['2016-2017', '2017-2018'] track by year"></select>
+  <select ng-model="editRow.financial_year" ng-options="year for year in pelf.financial_years_all track by year"></select>
 </td>
 <td>
   <input ng-model="editRow.note" size="20"/>

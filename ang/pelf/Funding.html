@@ -23,7 +23,7 @@
           <a href crm-confirm="{type: 'delete', obj:part}" on-yes="deleteRow(part)" >Delete</a>
       </div></td>
     </tr>
-    <tr ng-repeat-end pelf-funding-edit edit-row="selected" ng-if="part.id == selected.id" />
+    <tr ng-repeat-end pelf="pelf" pelf-funding-edit edit-row="selected" ng-if="part.id == selected.id" />
     <tr ng-if="grp.rows.length>1" class="pelf-subtotal">
       <td class="pelf-amount" >&pound;{{grp.sum|localeNumber}}</td>
       <td>Total {{grp.year}}</td>
