@@ -78,9 +78,9 @@
   <div class="pelf-row">
     <div class="pelf-column-1" >
       <div class="pelf-amount-wrapper" >
-        <h2>&pound;{{ sumFunding | localeNumber }}</h2>
+        <h2>&pound;{{ prospect.sumFunding | localeNumber }}</h2>
         <div ng-show="!editData" >
-          @ {{ prospect.scale }}%, est worth: &pound;{{ estWorth | localeNumber }}
+          @ {{ prospect.scale }}%, est worth: &pound;{{ prospect.estWorth | localeNumber }}
         </div>
         <!-- Amount Edit form -->
         <form crm-ui-id-scope ng-show="editData"  >

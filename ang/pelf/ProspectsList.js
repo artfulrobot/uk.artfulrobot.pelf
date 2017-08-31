@@ -1,23 +1,18 @@
 (function(angular, $, _) {
 
   // Nb. directive MUST start with lowercase letter.
-  angular.module('pelf').directive('pelfProspectsList', ['crmApi', '$timeout', function(crmApi, $timeout, pelf) {
+  angular.module('pelf').directive('pelfProspectsList', ['crmApi', '$timeout', function(crmApi, $timeout) {
     return {
       scope: {
-        pelf: '='
+        pelf: '=',
+        prospects: '='
       },
-      controller: ['$scope', '$location', 'crmApi', function ($scope, $location, crmApi) {
-        console.log("pelfProspectsList received Pelf object as ", $scope.pelf, $scope.pelf.friendlyProspectStage);
+      controller: ['$scope', function ($scope) {
+        console.log("pelfProspectsList ", $scope.pelf);
         $scope.crmUrl = CRM.url;
-        // We need to load our data.
-        crmApi('activity', 'GetPelfProspect', [])
-        .then(function(result) {
-          console.log("prospects loaded:", result);
-          $scope.prospects = result.values;
-        });
+        _.forEach($scope.prospects, function(activity) { $scope.pelf.fundingCalcs(activity); });
       }], // end of controller.
-      link: function(scope, elem, attrs) {
-      },
+      link: function(scope, elem, attrs) { },
       templateUrl: '~/pelf/ProspectsList.html',
     };
   }]);

@@ -33,6 +33,14 @@
     Pelf.prototype.friendlyProspectStage = function(machineName) {
       return this.prospect.stages[machineName];
     };
+    Pelf.prototype.fundingCalcs = function(activity) {
+      console.log("Running fundingCalcs on ", activity.funding);
+      activity.sumFunding = Math.round(_.reduce(activity.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
+      if ('scale' in activity) {
+        // If we have this, it's a prospect, calculate estWorth.
+        activity.estWorth = Math.round(activity.sumFunding  * activity.scale / 100, 0);
+      }
+    };
 
     // Fetch config, when we've got it, instantiate the object and return it.
     return crmApi('Pelf', 'GetConfig', {})

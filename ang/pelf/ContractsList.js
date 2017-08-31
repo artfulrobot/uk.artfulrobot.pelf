@@ -4,19 +4,17 @@
   angular.module('pelf').directive('pelfContractsList', ['crmApi', '$timeout', function(crmApi, $timeout, pelf) {
     return {
       scope: {
-        pelf: '='
+        pelf: '=',
+        contracts: '='
       },
-      controller: ['$scope', '$location', 'crmApi', function ($scope, $location, crmApi) {
+      controller: ['$scope', function ($scope) {
         $scope.crmUrl = CRM.url;
-        // We need to load our data.
-        crmApi('activity', 'GetPelfContract', [])
-        .then(function(result) {
-          console.log("contracts loaded:", result);
-          $scope.contracts = result.values;
+        // get sumFunding setup.
+        _.forEach($scope.contracts, function(contract) {
+          $scope.pelf.fundingCalcs(contract);
         });
       }], // end of controller.
-      link: function(scope, elem, attrs) {
-      },
+      link: function(scope, elem, attrs) { },
       templateUrl: '~/pelf/ContractsList.html',
     };
   }]);

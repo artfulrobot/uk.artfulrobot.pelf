@@ -18,7 +18,7 @@
             <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
           </span>
         </td>
-        <td>{{ contract.est_amount }}@todo</td>
+        <td>{{ contract.sumFunding }}</td>
         <td>
           <span ng-repeat="contact in contract.contactAssigned">
             <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>

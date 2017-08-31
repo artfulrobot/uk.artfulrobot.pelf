@@ -21,11 +21,21 @@
     // Otherwise, injecting from the factory gives you a promise that you can
     // only interact with via a then().
     $routeProvider.when('/pelf/prospects', {
-      controller: ['$scope', 'pelf', function($scope, pelf) {
+      controller: ['$scope', 'pelf', 'prospects', function($scope, pelf, prospects) {
         $scope.pelf = pelf;
+        $scope.prospects = prospects;
       }],
-      resolve: { pelf: 'pelf' },
-      template: '<pelf-prospects-list pelf="pelf"></pelf-prospects-list>'
+      resolve: {
+        pelf: 'pelf',
+        prospects: function(crmApi) {
+          return crmApi('activity', 'GetPelfProspect', [])
+          .then(function(result) {
+            console.log("prospects loaded:", result);
+            return result.values;
+          });
+        }
+      },
+      template: '<pelf-prospects-list pelf="pelf" prospects="prospects"></pelf-prospects-list>'
     });
 
     $routeProvider.when('/pelf/prospects/:id', {
@@ -62,20 +72,31 @@
     });
 
     $routeProvider.when('/pelf/contracts', {
-      controller: ['$scope', 'pelf', function($scope, pelf) {
+      controller: ['$scope', 'pelf', 'contracts', function($scope, pelf, contracts) {
         $scope.pelf = pelf;
+        $scope.contracts = contracts;
       }],
-      resolve: { pelf: 'pelf' },
-      template: '<pelf-contracts-list pelf="pelf"></pelf-contracts-list>'
+      resolve: {
+        pelf: 'pelf',
+        contracts: function(crmApi) {
+          return crmApi('activity', 'GetPelfContract', [])
+          .then(function(result) {
+            console.log("contracts loaded:", result);
+            return result.values;
+          });
+        }
+      },
+      template: '<pelf-contracts-list contracts="contracts" pelf="pelf"></pelf-contracts-list>'
     });
 
 
     $routeProvider.when('/pelf/contracts/:id', {
-      template: '<pelf-contract contract="contract" ></pelf-contract>',
-      controller: function($scope, $route, contract) {
+      template: '<pelf-contract pelf="pelf" contract="contract" ></pelf-contract>',
+      controller: ['$scope', '$route', 'pelf', 'contract', function($scope, $route, pelf, contract) {
         // Pass contract looked up from id in route to template.
         $scope.contract = contract;
-      },
+        $scope.pelf = pelf;
+      }],
       resolve: {
         pelf: 'pelf',
         contract: function(crmApi, $route, $location) {

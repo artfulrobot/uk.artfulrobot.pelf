@@ -30,8 +30,9 @@
           $scope.sumFunding = Math.round(_.reduce(prospect.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
           $scope.estWorth = Math.round($scope.sumFunding  * prospect.scale / 100, 0);
         };
-        $scope.$watch('prospect.funding', fundingCalcs, true);
-        $scope.$watch('prospect.scale', fundingCalcs);
+        var updateFundingCalcs = function() { $scope.pelf.fundingCalcs(prospect); };
+        $scope.$watch('prospect.funding', updateFundingCalcs, true);
+        $scope.$watch('prospect.scale', updateFundingCalcs);
 
         $scope.editData = false;
         // Edit mode start.

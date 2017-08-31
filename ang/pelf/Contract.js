@@ -22,10 +22,8 @@
         var contract = $scope.contract;
 
         // Calculated values.
-        var fundingCalcs = function() {
-          $scope.sumFunding = Math.round(_.reduce(contract.funding, function(tot, row) { return tot+parseFloat(row.amount); }, 0) ,0);
-        };
-        $scope.$watch('contract.funding', fundingCalcs, true);
+        var updateFundingCalcs = function() { $scope.pelf.fundingCalcs(contract); };
+        $scope.$watch('contract.funding', updateFundingCalcs, true);
 
         $scope.formatDate = CRM.utils.formatDate;
 

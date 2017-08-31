@@ -15,12 +15,12 @@
     <tbody>
       <tr ng-repeat="prospect in prospects">
         <td>{{ pelf.friendlyProspectStage(prospect.stage) }}</td>
-        <td><a href="#/pelf/prospects/{{ prospect.id }}">{{ prospect.subject }}</a><br />
+        <td><a href="#/pelf/prospects/{{ prospect.id }}">{{ prospect.subject || '(Untitled prospect)' }}</a><br />
           <span ng-repeat="contact in prospect.contactWith">
             <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
           </span>
         </td>
-        <td>{{ prospect.est_amount }} @todo</td>
+        <td>{{ prospect.estWorth }}</td>
         <td>
           <span ng-repeat="contact in prospect.contactAssigned">
             <a href="{{ crmUrl('civicrm/contact/view', {reset:1, cid: contact.contact_id }) }}" >{{contact.display_name}}</a>
